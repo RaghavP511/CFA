@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level II — Review</title>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'none' },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<style>
+  :root{
+    --navy:#0f2a4a; --navy-2:#14385f; --accent:#c8a24a; --accent-soft:#f3ecd8;
+    --ink:#1c2530; --muted:#5c6b7a; --line:#e3e8ee; --bg:#eef2f7; --card:#fff;
+    --code-bg:#f0f4f8; --green:#1f7a54; --red:#b5473a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.65;}
+
+  .topbar{background:var(--navy);color:#fff;padding:20px 40px;display:flex;align-items:center;
+    justify-content:space-between;box-shadow:0 2px 8px rgba(15,42,74,.15);position:sticky;top:0;z-index:50;}
+  .topbar h1{margin:0;font-size:20px;letter-spacing:.3px;}
+  .topbar .tag{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;}
+
+  .modtabs{display:flex;gap:6px;background:var(--navy-2);padding:0 40px;position:sticky;top:64px;z-index:49;
+    box-shadow:0 2px 6px rgba(15,42,74,.12);flex-wrap:wrap;}
+  .modtab{background:transparent;border:none;color:#b8c6d8;font-size:14px;font-weight:600;
+    padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;font-family:inherit;}
+  .modtab:hover{color:#fff;background:rgba(255,255,255,.05);}
+  .modtab.active{color:#fff;border-bottom-color:var(--accent);}
+  .modtab .num{color:var(--accent);font-weight:700;margin-right:6px;}
+  .modtab.ref{margin-left:auto;color:#a9e0c5;}
+  .modtab.ref.active{border-bottom-color:var(--green);}
+
+  main{max-width:1000px;margin:0 auto;padding:36px 40px 90px;}
+  .module{display:none;animation:fade .25s ease;}
+  .module.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .mod-head{margin-bottom:6px;}
+  .mod-head h2{margin:0 0 4px;font-size:26px;color:var(--navy);}
+  .mod-head .los{font-size:13px;color:var(--muted);background:var(--code-bg);border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0 0;}
+  .mod-head .los strong{color:var(--ink);}
+
+  .subtabs{display:flex;gap:4px;margin:26px 0 22px;border-bottom:2px solid var(--line);flex-wrap:wrap;}
+  .subtab{background:transparent;border:none;font-family:inherit;font-size:13px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:10px 18px;cursor:pointer;
+    border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;}
+  .subtab:hover{color:var(--navy);}
+  .subtab.active{color:var(--navy);border-bottom-color:var(--accent);}
+  .subtab.walk.active{border-bottom-color:var(--green);}
+
+  .panel{display:none;animation:fade .2s ease;}
+  .panel.active{display:block;}
+
+  .formula{border:1px solid var(--line);border-radius:9px;padding:14px 18px 6px;margin-bottom:14px;background:#fcfdff;}
+  .formula .fname{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+  .formula .fnote{font-size:12.5px;color:var(--muted);margin-top:-2px;}
+  .mjx-container{overflow-x:auto;overflow-y:hidden;}
+
+  table.qr{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;}
+  table.qr th{background:var(--navy);color:#fff;text-align:left;padding:10px 14px;font-weight:600;font-size:13px;}
+  table.qr th:first-child{border-radius:8px 0 0 0;width:24%;}
+  table.qr th:last-child{border-radius:0 8px 0 0;}
+  table.qr td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.qr td:first-child{font-weight:600;color:var(--navy);}
+  table.qr tr:nth-child(even) td{background:#fafcfe;}
+  .tag-good{color:var(--green);font-weight:600;}
+  .tag-bad{color:var(--red);font-weight:600;}
+
+  .callout{background:var(--accent-soft);border-radius:9px;padding:12px 16px;font-size:13.5px;color:#6b551a;margin:16px 0;}
+  .callout strong{color:#4d3d10;}
+
+  .subhead{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;text-transform:uppercase;
+    letter-spacing:1px;color:var(--navy);margin:26px 0 14px;}
+  .subhead::before{content:"";width:18px;height:18px;background:var(--accent);border-radius:4px;flex-shrink:0;}
+
+  .walk h4{color:var(--navy);font-size:16px;margin:26px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line);}
+  .walk h5{color:var(--navy-2);font-size:14px;margin:20px 0 6px;}
+  .walk p{font-size:14px;margin:10px 0;}
+  .walk ul{font-size:14px;margin:8px 0;padding-left:22px;}
+  .walk li{margin:5px 0;}
+  .walk table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0;}
+  .walk table th{background:var(--navy-2);color:#fff;text-align:left;padding:8px 12px;font-size:12.5px;}
+  .walk table td{padding:8px 12px;border-bottom:1px solid var(--line);}
+  .walk table tr:nth-child(even) td{background:#f7fafd;}
+  .walk blockquote{border-left:3px solid var(--accent);background:var(--accent-soft);margin:14px 0;
+    padding:10px 16px;border-radius:0 6px 6px 0;font-size:13.5px;color:#6b551a;}
+  .walk blockquote strong{color:#4d3d10;}
+
+  footer.foot{max-width:1000px;margin:0 auto;padding:0 40px 50px;font-size:12px;color:var(--muted);}
+
+  @media(max-width:720px){
+    .topbar,.modtabs,main,footer.foot{padding-left:18px;padding-right:18px;}
+    .modtab{padding:12px 12px;font-size:13px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>CFA Level II — Review</h1>
+  <span class="tag">Quantitative Methods</span>
+</div>
+
+<div class="modtabs" id="modtabs">
+  <button class="modtab active" data-mod="lm1"><span class="num">LM1</span>Multiple Regression</button>
+  <button class="modtab" data-mod="lm2"><span class="num">LM2</span>Evaluating Fit</button>
+  <button class="modtab" data-mod="lm3"><span class="num">LM3</span>Misspecification</button>
+  <button class="modtab" data-mod="lm4"><span class="num">LM4</span>Extensions</button>
+  <button class="modtab ref" data-mod="ref">★ Stat Tests</button>
+</div>
+
+<main>
+
+  <!-- ==================== LM1 ==================== -->
+  <section class="module active" id="lm1">
+    <div class="mod-head">
+      <h2>LM1 · Basics of Multiple Regression &amp; Underlying Assumptions</h2>
+      <div class="los"><strong>LOS:</strong> (a) problems addressed by MLR and the regression process;
+        (b) formulate a model and interpret slope coefficients;
+        (c) explain assumptions and interpret residual plots for violations.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm1-f">Formulas</button>
+      <button class="subtab" data-panel="lm1-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm1-w">Walkthrough</button>
+    </div>
+
+    <div class="panel active" id="lm1-f">
+      <div class="formula"><div class="fname">Multiple linear regression model</div>
+        \[ Y_i = b_0 + b_1 X_{1i} + b_2 X_{2i} + \cdots + b_k X_{ki} + \varepsilon_i \]
+        <div class="fnote">\(b_0\)=intercept; \(b_1\ldots b_k\)=partial slope coefficients; \(\varepsilon_i\)=error; \(i=1,\ldots,n\).</div></div>
+      <div class="formula"><div class="fname">Predicted (fitted) value</div>
+        \[ \hat{Y}_i = \hat{b}_0 + \hat{b}_1 X_{1i} + \cdots + \hat{b}_k X_{ki} \]
+        <div class="fnote">The deterministic part with estimated coefficients.</div></div>
+      <div class="formula"><div class="fname">Partial slope coefficient (interpretation)</div>
+        \[ b_j = \frac{\partial Y}{\partial X_j}\quad\text{(all other IVs held constant)} \]
+        <div class="fnote">Expected change in DV per one-unit change in \(X_j\), holding all other IVs fixed.</div></div>
+      <div class="formula"><div class="fname">Residual (in-sample error)</div>
+        \[ e_i = Y_i - \hat{Y}_i \]
+        <div class="fnote">Estimate of the unobservable error \(\varepsilon_i\).</div></div>
+      <div class="formula"><div class="fname">Homoskedasticity condition (Assumption 2)</div>
+        \[ \operatorname{Var}(\varepsilon_i \mid X) = \sigma^2 \quad(\text{constant for all } i) \]
+        <div class="fnote">Error variance the same across all observations.</div></div>
+      <div class="formula"><div class="fname">Dummy variables for a qualitative IV</div>
+        \[ \text{number of dummies} = m - 1 \]
+        <div class="fnote">\(m\)=categories; \(m-1\) avoids the dummy-variable trap.</div></div>
+    </div>
+
+    <div class="panel" id="lm1-q">
+      <div class="callout"><strong>The five assumptions of multiple linear regression</strong> — tested directly and again in LM3 (violations).</div>
+      <table class="qr">
+        <tr><th>Concept</th><th>Super-short explanation</th></tr>
+        <tr><td>1. Linearity</td><td>DV–IV relationship is linear (in the coefficients).</td></tr>
+        <tr><td>2. Homoskedasticity</td><td>Error variance constant, \(\operatorname{Var}(\varepsilon)=\sigma^2\).</td></tr>
+        <tr><td>3. Independence of errors</td><td>Residuals uncorrelated across observations (no serial correlation).</td></tr>
+        <tr><td>4. Normality</td><td>Residuals normally distributed.</td></tr>
+        <tr><td>5. Independence of IVs</td><td>IVs non-random; no exact linear relationship among them.</td></tr>
+        <tr><td>Regression process</td><td>Specify → estimate → analyze residuals/fit → revise if assumptions fail.</td></tr>
+        <tr><td>Uses of MLR</td><td>Identify relationships, test theories, forecast a DV.</td></tr>
+        <tr><td>Scatterplot matrix</td><td>Want linear DV–IV relations, but <em>no</em> strong IV–IV relations.</td></tr>
+        <tr><td>Residual scatterplot</td><td>Should be random with constant spread; patterns signal heteroskedasticity/misspecification.</td></tr>
+        <tr><td>Q–Q plot</td><td>Checks normality; on the line = normal; tails off = outliers/non-normality.</td></tr>
+        <tr><td>Dummy-variable trap</td><td>\(m\) dummies for \(m\) categories = perfect collinearity — use \(m-1\).</td></tr>
+      </table>
+    </div>
+
+    <div class="panel walk" id="lm1-w">
+      <h4>The three learning outcomes</h4>
+      <ul>
+        <li><strong>(a)</strong> Problems addressed by MLR and the <strong>regression process</strong>.</li>
+        <li><strong>(b)</strong> Formulate the model and <strong>interpret estimated coefficients</strong>.</li>
+        <li><strong>(c)</strong> Explain the <strong>assumptions</strong> and interpret <strong>residual plots</strong>.</li>
+      </ul>
+      <p>LM1 is where you learn to <em>build and read</em> the model. LM2 (fit) and LM3 (violations) rest on this foundation.</p>
+      <h4>Part 1 — What Multiple Regression Does (LOS a)</h4>
+      <p>MLR extends simple regression to <strong>two or more independent variables</strong>, serving three purposes:</p>
+      <ul><li><strong>Identify relationships</strong> between variables.</li><li><strong>Test existing theories.</strong></li><li><strong>Forecast</strong> a dependent variable.</li></ul>
+      <p>The <strong>regression process</strong> is iterative: specify → estimate → analyze residuals/fit → revise if assumptions are violated.</p>
+      <h4>Part 2 — Formulating &amp; Interpreting (LOS b)</h4>
+      <h5>2.1 The model</h5>
+      \[ Y_i = b_0 + b_1 X_{1i} + \cdots + b_k X_{ki} + \varepsilon_i, \qquad i=1,\ldots,n \]
+      <p>Two pieces: the <strong>deterministic part</strong> \(b_0 + b_1X_{1i}+\cdots\) (explained) and the <strong>stochastic part</strong> \(\varepsilon_i\) (unexplained).</p>
+      <h5>2.2 Interpreting a partial slope coefficient</h5>
+      \[ b_j = \frac{\partial Y}{\partial X_j}\quad\text{(all other IVs held constant)} \]
+      <p>Change in the DV per one-unit change in that IV, <strong>holding all others constant</strong> — the phrase examiners look for.</p>
+      <h5>2.3 Worked interpretation</h5>
+      \[ \text{RET} = 0.0023 - 5.0585\,(\text{BY}) - 2.1901\,(\text{CS}) \]
+      <ul>
+        <li><strong>Intercept:</strong> both IVs = 0 → RET = 0.0023.</li>
+        <li><strong>BY:</strong> +1 in bond yield lowers RET by 5.0585, holding CS constant.</li>
+        <li><strong>CS:</strong> −1 in credit spread raises RET by 2.1901, holding BY constant.</li>
+      </ul>
+      <h5>2.4 Dummy variables</h5>
+      \[ \text{number of dummies} = m - 1 \]
+      <p>Using \(m-1\) dummies avoids the <strong>dummy-variable trap</strong>; the omitted category becomes the <strong>base (reference) category</strong>.</p>
+      <h4>Part 3 — The Five Assumptions (LOS c)</h4>
+      <table>
+        <tr><th>#</th><th>Assumption</th><th>Meaning</th></tr>
+        <tr><td>1</td><td><strong>Linearity</strong></td><td>DV–IV relationship linear (in coefficients).</td></tr>
+        <tr><td>2</td><td><strong>Homoskedasticity</strong></td><td>Constant error variance: \(\operatorname{Var}(\varepsilon_i\mid X)=\sigma^2\).</td></tr>
+        <tr><td>3</td><td><strong>Independence of errors</strong></td><td>Residuals uncorrelated across observations.</td></tr>
+        <tr><td>4</td><td><strong>Normality</strong></td><td>Residuals normally distributed.</td></tr>
+        <tr><td>5</td><td><strong>Independence of IVs</strong></td><td>IVs non-random; no exact linear relationship among them.</td></tr>
+      </table>
+      <blockquote>Assumption 2 fails → <strong>heteroskedasticity</strong>; 3 fails → <strong>serial correlation</strong>; 5 fails → <strong>multicollinearity</strong>. All three are the heart of LM3.</blockquote>
+      <h4>Part 4 — Diagnostic Plots</h4>
+      <h5>4.1 Scatterplot matrix</h5>
+      <p>Want linearity between <strong>DV and IVs</strong>; do <strong>not</strong> want strong relationships <strong>among IVs</strong> (multicollinearity warning).</p>
+      <h5>4.2 Residual scatterplot</h5>
+      <p><strong>Good:</strong> random, constant spread. <strong>Bad:</strong> fanning (heteroskedasticity) or a directional pattern (correlated errors / misspecification).</p>
+      <h5>4.3 Q–Q plot</h5>
+      <p>On the straight line → normal residuals; tails peeling off → outliers/non-normality.</p>
+      <h4>Exam-focus cheat sheet</h4>
+      \[ Y_i = b_0 + b_1 X_{1i} + \cdots + b_k X_{ki} + \varepsilon_i \]
+      <ul>
+        <li>Partial slope = ΔDV per one-unit ΔIV, <strong>all else constant</strong>.</li>
+        <li>Qualitative IV with \(m\) categories → \(m-1\) dummies; omitted = base.</li>
+        <li>Five assumptions: Linearity · Homoskedasticity · Independent errors · Normality · Independent IVs.</li>
+        <li>Scatterplot matrix: want DV–IV linearity, not IV–IV.</li>
+        <li>Q–Q plot: on the line = normal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== LM2 ==================== -->
+  <section class="module" id="lm2">
+    <div class="mod-head">
+      <h2>LM2 · Evaluating Regression Model Fit &amp; Interpreting Results</h2>
+      <div class="los"><strong>LOS:</strong> (a) evaluate fit via the ANOVA table and goodness-of-fit measures;
+        (b) hypotheses on two+ coefficients and joint (F) tests;
+        (c) calculate and interpret a predicted value.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm2-f">Formulas</button>
+      <button class="subtab" data-panel="lm2-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm2-w">Walkthrough</button>
+    </div>
+
+    <div class="panel active" id="lm2-f">
+      <div class="formula"><div class="fname">Sum-of-squares identity</div>
+        \[ \underbrace{\sum_{i=1}^{n}(Y_i-\bar{Y})^2}_{\text{SST}}
+           = \underbrace{\sum_{i=1}^{n}(\hat{Y}_i-\bar{Y})^2}_{\text{SSR}}
+           + \underbrace{\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2}_{\text{SSE}} \]
+        <div class="fnote">Total = Explained (regression) + Unexplained (error).</div></div>
+      <div class="formula"><div class="fname">Coefficient of determination</div>
+        \[ R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}} \]
+        <div class="fnote">Fraction of DV variation explained; never decreases when IVs are added.</div></div>
+      <div class="formula"><div class="fname">Adjusted \(R^2\) — three equivalent forms</div>
+        \[ \bar{R}^2 = 1 - \left(\frac{\text{SSE}/(n-k-1)}{\text{SST}/(n-1)}\right)
+           = 1 - \left(\frac{n-1}{n-k-1}\right)(1-R^2) = 1 - \frac{\text{MSE}}{\text{MST}} \]
+        <div class="fnote">Penalizes for df. Rises only if added coefficient has \(|t|>1.0\); can be negative.</div></div>
+      <div class="callout"><strong>Caution — MST − MSE, not MSR:</strong>
+        \(\bar{R}^2 = 1 - \dfrac{\text{MSE}}{\text{MST}} = \dfrac{\text{MST}-\text{MSE}}{\text{MST}}\), which does <em>not</em> equal \(\text{MSR}/\text{MST}\) — mean squares use different df, so \(\text{MST}\neq\text{MSR}+\text{MSE}\).</div>
+      <div class="formula"><div class="fname">Mean squares (each = SS ÷ its own df)</div>
+        \[ \text{MSR}=\frac{\text{SSR}}{k},\quad \text{MSE}=\frac{\text{SSE}}{n-k-1},\quad \text{MST}=\frac{\text{SST}}{n-1} \]
+        <div class="fnote">df add up: \(k+(n-k-1)=n-1\). MST is the sample variance of \(Y\).</div></div>
+      <div class="formula"><div class="fname">Standard error of the estimate</div>
+        \[ \text{SEE}=\sqrt{\text{MSE}}=\sqrt{\frac{\text{SSE}}{n-k-1}} \]
+        <div class="fnote">Typical size of the residuals; lower is better.</div></div>
+      <div class="formula"><div class="fname">General linear F-test (whole model)</div>
+        \[ F=\frac{\text{MSR}}{\text{MSE}}=\frac{\text{SSR}/k}{\text{SSE}/(n-k-1)},\quad df=(k,\,n-k-1) \]
+        <div class="fnote">\(H_0: b_1=\cdots=b_k=0\). One-tailed right. Reject if \(F>F_{\text{crit}}\).</div></div>
+      <div class="formula"><div class="fname">Nested (partial) F-test</div>
+        \[ F=\frac{(\text{SSE}_R-\text{SSE}_U)/q}{\text{SSE}_U/(n-k-1)},\quad df=(q,\,n-k-1) \]
+        <div class="fnote">\(q\)=# restrictions, \(k\)=IVs in unrestricted model. Collapses to general F when \(q=k\).</div></div>
+      <div class="formula"><div class="fname">t-test for a single coefficient</div>
+        \[ t=\frac{\hat{b}_j - B_j}{s_{\hat{b}_j}},\quad df=n-k-1 \]
+        <div class="fnote">Usually \(B_j=0\). Identical to simple-regression t-test.</div></div>
+      <div class="formula"><div class="fname">AIC &amp; BIC</div>
+        \[ \text{AIC}=n\ln\!\left(\frac{\text{SSE}}{n}\right)+2(k+1) \]
+        \[ \text{BIC}=n\ln\!\left(\frac{\text{SSE}}{n}\right)+\ln(n)\,(k+1) \]
+        <div class="fnote">Lower = better. AIC → prediction; BIC → goodness of fit. BIC penalizes complexity more (\(\ln n>2\)).</div></div>
+      <div class="formula"><div class="fname">Prediction &amp; forecast interval</div>
+        \[ \hat{Y}=\hat{b}_0+\sum_{j=1}^{k}\hat{b}_j X_j,\qquad \hat{Y}\pm t_{\text{crit}}\cdot s_f \]
+        <div class="fnote">Use <em>all</em> coefficients. \(s_f>\text{SEE}\) because IV values are themselves estimated.</div></div>
+    </div>
+
+    <div class="panel" id="lm2-q">
+      <table class="qr">
+        <tr><th>Concept</th><th>Super-short explanation</th></tr>
+        <tr><td>\(R^2\)</td><td>% of DV variation explained; <span class="tag-bad">flaw:</span> never falls as IVs are added.</td></tr>
+        <tr><td>Adjusted \(R^2\)</td><td>\(R^2\) penalized for df; the right fit measure in MLR.</td></tr>
+        <tr><td>\(|t|>1.0\) rule</td><td>Adding a variable raises \(\bar{R}^2\) only if its \(|t|>1\) — below significance.</td></tr>
+        <tr><td>MSR</td><td>Explained variance per IV; \(\text{SSR}/k\).</td></tr>
+        <tr><td>MSE</td><td>Unexplained variance per residual df; \(\text{SSE}/(n-k-1)\).</td></tr>
+        <tr><td>General F-test</td><td>Whole-model explanatory power; \(F=\text{MSR}/\text{MSE}\).</td></tr>
+        <tr><td>Nested F-test</td><td>Whether a group of added variables jointly matters.</td></tr>
+        <tr><td>AIC</td><td><span class="tag-good">Prediction.</span> Lower better; smaller penalty than BIC.</td></tr>
+        <tr><td>BIC</td><td><span class="tag-good">Goodness of fit.</span> Lower better; harsher penalty → parsimony.</td></tr>
+        <tr><td>Sig. F, weak t's</td><td>Classic multicollinearity signature (see LM3).</td></tr>
+        <tr><td>Prediction rule</td><td>Plug IV values into the full equation; keep all coefficients.</td></tr>
+        <tr><td>Forecast SE</td><td>Larger than SEE — adds IV sampling error.</td></tr>
+      </table>
+      <div class="callout"><strong>Exam tip:</strong> the "best" model has the <em>highest adjusted \(R^2\)</em> and <em>lowest AIC/BIC</em> — usually <em>not</em> the highest plain \(R^2\).</div>
+    </div>
+
+    <div class="panel walk" id="lm2-w">
+      <h4>The three learning outcomes</h4>
+      <ul>
+        <li><strong>(a)</strong> Evaluate fit via the <strong>ANOVA table</strong> and <strong>goodness-of-fit measures</strong>.</li>
+        <li><strong>(b)</strong> Hypotheses on <strong>two or more coefficients</strong> and <strong>joint (F) tests</strong>.</li>
+        <li><strong>(c)</strong> Calculate and interpret a <strong>predicted value</strong>.</li>
+      </ul>
+      <p>LM1 built the model; LM2 is about <em>judging whether it is any good</em> and <em>using it to forecast</em>.</p>
+      <h4>Part 1 — Goodness of Fit (LOS a)</h4>
+      <h5>1.1 Sum-of-squares foundation</h5>
+      \[ \text{SST}=\text{SSR}+\text{SSE} \]
+      <ul><li><strong>SST</strong> — total dispersion of \(Y\) around its mean.</li>
+        <li><strong>SSR</strong> — explained (predicted around the mean).</li>
+        <li><strong>SSE</strong> — unexplained (actual around predicted).</li></ul>
+      <h5>1.2 Coefficient of determination</h5>
+      \[ R^2=\frac{\text{SSR}}{\text{SST}}=1-\frac{\text{SSE}}{\text{SST}} \]
+      <p><strong>Critical flaw:</strong> \(R^2\) <strong>never decreases</strong> as IVs are added — adding an IV can only lower SSE.</p>
+      <blockquote><strong>Overfitting</strong> — too complex; coefficients stop representing true relationships. Symptom: low in-sample error, high out-of-sample error.</blockquote>
+      <h5>1.3 Adjusted \(R^2\)</h5>
+      \[ \bar{R}^2 = 1 - \left(\frac{n-1}{n-k-1}\right)(1-R^2) = 1 - \frac{\text{MSE}}{\text{MST}} \]
+      <ul><li>If \(k\geq1\), \(\bar{R}^2<R^2\) always; can be negative.</li>
+        <li>Adding a variable: \(\bar{R}^2\) rises if \(|t|>1.0\), falls if \(|t|<1.0\).</li></ul>
+      <blockquote><strong>Caution:</strong> \(\bar{R}^2=1-\dfrac{\text{MSE}}{\text{MST}}=\dfrac{\text{MST}-\text{MSE}}{\text{MST}}\neq\dfrac{\text{MSR}}{\text{MST}}\) — mean squares use different df.</blockquote>
+      <h5>1.4 Mean squares &amp; degrees of freedom</h5>
+      \[ \text{MSR}=\frac{\text{SSR}}{k},\quad \text{MSE}=\frac{\text{SSE}}{n-k-1},\quad \text{MST}=\frac{\text{SST}}{n-1} \]
+      \[ \underbrace{k}_{\text{reg}}+\underbrace{(n-k-1)}_{\text{error}}=\underbrace{n-1}_{\text{total}} \]
+      \[ \text{SEE}=\sqrt{\text{MSE}} \]
+      <h5>1.5 AIC and BIC</h5>
+      \[ \text{AIC}=n\ln\!\left(\frac{\text{SSE}}{n}\right)+2(k+1),\qquad \text{BIC}=n\ln\!\left(\frac{\text{SSE}}{n}\right)+\ln(n)(k+1) \]
+      <p>Lower = better. <strong>AIC → prediction; BIC → goodness of fit.</strong> BIC penalizes complexity more. Absolute values meaningless — only relative matters.</p>
+      <h5>1.6 ANOVA table</h5>
+      <table>
+        <tr><th>Source</th><th>df</th><th>SS</th><th>MS</th></tr>
+        <tr><td>Regression</td><td>\(k\)</td><td>SSR</td><td>\(\text{SSR}/k\)</td></tr>
+        <tr><td>Residual</td><td>\(n-k-1\)</td><td>SSE</td><td>\(\text{SSE}/(n-k-1)\)</td></tr>
+        <tr><td>Total</td><td>\(n-1\)</td><td>SST</td><td></td></tr>
+      </table>
+      <h5>1.7 Worked example — five-factor model (\(n=50,\ k=5\))</h5>
+      <table>
+        <tr><th>Source</th><th>df</th><th>SS</th><th>MS</th></tr>
+        <tr><td>Regression</td><td>5</td><td>90.6234</td><td>18.1247</td></tr>
+        <tr><td>Residual</td><td>44</td><td>56.6182</td><td>1.2868</td></tr>
+        <tr><td>Total</td><td>49</td><td>147.2416</td><td></td></tr>
+      </table>
+      \[ R^2=\frac{90.6234}{147.2416}=0.6155,\qquad \bar{R}^2=1-\frac{1.2868}{3.0049}=0.5718 \]
+      <h4>Part 2 — Hypothesis Testing (LOS b)</h4>
+      <h5>2.1 Single coefficient — t-test</h5>
+      \[ t=\frac{\hat{b}_j-B_j}{s_{\hat{b}_j}},\quad df=n-k-1 \]
+      <h5>2.2 Nested (restricted) F-test</h5>
+      \[ F=\frac{(\text{SSE}_R-\text{SSE}_U)/q}{\text{SSE}_U/(n-k-1)},\quad df=(q,\,n-k-1) \]
+      <h5>2.3 General linear F-test</h5>
+      \[ H_0: b_1=\cdots=b_k=0,\qquad F=\frac{\text{MSR}}{\text{MSE}},\quad df=(k,\,n-k-1) \]
+      \[ F=\frac{18.1247}{1.2868}=14.085 \]
+      <p>At 5% (right-tailed), \(F_{5,44}=2.427\). Since \(14.085>2.427\), <strong>reject \(H_0\)</strong> — the model has explanatory power.</p>
+      <blockquote><strong>Trap:</strong> a significant F with insignificant individual t-stats is the classic <strong>multicollinearity</strong> signature (LM3).</blockquote>
+      <h4>Part 3 — Prediction (LOS c)</h4>
+      \[ \hat{Y}=\hat{b}_0+\sum_{j=1}^{k}\hat{b}_j X_j \]
+      <p><strong>Rule:</strong> use <em>all</em> coefficients, even insignificant ones.</p>
+      \[ \text{RET}=-0.823+1.719(3)+0.412(-2)+0.026(-5)+0.553(1)-0.067(3)=3.732 \]
+      <p>The forecast standard error \(s_f>\text{SEE}\) because you also had to forecast the IV values (model error + sampling error).</p>
+    </div>
+  </section>
+
+  <!-- ==================== LM3 ==================== -->
+  <section class="module" id="lm3">
+    <div class="mod-head">
+      <h2>LM3 · Model Misspecification</h2>
+      <div class="los"><strong>LOS:</strong> (a) misspecification effects and avoidance;
+        (b) heteroskedasticity; (c) serial correlation; (d) multicollinearity.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm3-f">Formulas</button>
+      <button class="subtab" data-panel="lm3-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm3-w">Walkthrough</button>
+    </div>
+
+    <div class="panel active" id="lm3-f">
+      <div class="formula"><div class="fname">Omitted-variable bias condition</div>
+        \[ \operatorname{Corr}(X_{\text{omitted}},X_{\text{included}})\neq 0 \;\Rightarrow\; \hat{b}\ \text{biased \& inconsistent} \]
+        <div class="fnote">If uncorrelated with included IVs, coefficients stay unbiased but errors may become CH/SC.</div></div>
+      <div class="formula"><div class="fname">Breusch–Pagan — conditional heteroskedasticity</div>
+        \[ \text{BP}=n\cdot R^2_{\text{resid}}\;\sim\;\chi^2_k \]
+        <div class="fnote">Regress squared residuals on IVs. \(H_0\): no CH. Right-tailed, \(df=k\).</div></div>
+      <div class="formula"><div class="fname">Durbin–Watson — first-order serial correlation</div>
+        \[ \text{DW}\approx 2(1-r) \]
+        <div class="fnote">\(r\)=residual autocorrelation. DW=2 → none; &lt;2 → positive SC; &gt;2 → negative SC.</div></div>
+      <div class="formula"><div class="fname">Variance inflation factor — multicollinearity</div>
+        \[ \text{VIF}_j=\frac{1}{1-R^2_j} \]
+        <div class="fnote">\(R^2_j\) from regressing \(X_j\) on other IVs. Min = 1; &gt;5 concerning; &gt;10 serious.</div></div>
+    </div>
+
+    <div class="panel" id="lm3-q">
+      <div class="callout"><strong>Well-specified model:</strong> economic reasoning · parsimonious · good out-of-sample · appropriate functional form · satisfies assumptions.</div>
+      <table class="qr">
+        <tr><th>Failure</th><th>Explanation</th></tr>
+        <tr><td>Omitted variables</td><td>Missing a relevant IV; biases coefficients if correlated with included IVs.</td></tr>
+        <tr><td>Wrong functional form</td><td>Ignoring non-linearity; fix by transforming (logs, squares).</td></tr>
+        <tr><td>Inappropriate scaling</td><td>Mismatched scales; can induce CH / collinearity.</td></tr>
+        <tr><td>Inappropriate pooling</td><td>Mixing populations/regimes (e.g., across a structural break).</td></tr>
+      </table>
+      <div class="subhead">Heteroskedasticity</div>
+      <table class="qr">
+        <tr><th>Aspect</th><th>Explanation</th></tr>
+        <tr><td>Unconditional</td><td>Variance <em>not</em> related to IVs. <span class="tag-good">No inference problem.</span></td></tr>
+        <tr><td>Conditional (CH)</td><td>Variance <em>correlated with</em> IVs. <span class="tag-bad">Harmful type.</span></td></tr>
+        <tr><td>Coefficients</td><td>Still consistent/unbiased.</td></tr>
+        <tr><td>Inference</td><td>SEs biased (usually too small) → t inflated → Type I error. F unreliable.</td></tr>
+        <tr><td>Test</td><td>Breusch–Pagan \(n\cdot R^2_{\text{resid}}\sim\chi^2_k\).</td></tr>
+        <tr><td>Fix</td><td>Robust / White (heteroskedasticity-consistent) SEs.</td></tr>
+      </table>
+      <div class="subhead">Serial Correlation</div>
+      <table class="qr">
+        <tr><th>Aspect</th><th>Explanation</th></tr>
+        <tr><td>Positive SC</td><td>Positive residual tends to follow a positive one (most common).</td></tr>
+        <tr><td>Negative SC</td><td>Positive residual tends to follow a negative one.</td></tr>
+        <tr><td>Coefficients</td><td>Consistent — <em>unless</em> a lagged DV is an IV (then invalid).</td></tr>
+        <tr><td>Inference</td><td>Positive SC underestimates SEs → t and F inflated → Type I error.</td></tr>
+        <tr><td>Tests</td><td>Durbin–Watson (1st order); Breusch–Godfrey (any lag).</td></tr>
+        <tr><td>Fix</td><td>Newey–West SEs (also correct CH).</td></tr>
+      </table>
+      <div class="subhead">Multicollinearity</div>
+      <table class="qr">
+        <tr><th>Aspect</th><th>Explanation</th></tr>
+        <tr><td>Coefficients</td><td>Consistent but imprecise/unreliable.</td></tr>
+        <tr><td>Inference</td><td>Inflated SEs → insignificant t's, yet significant F and high \(R^2\). <span class="tag-bad">The tell.</span></td></tr>
+        <tr><td>Detection</td><td>VIF \(=1/(1-R^2_j)\); &gt;5 concerning, &gt;10 serious.</td></tr>
+        <tr><td>Fix</td><td>Drop an IV (preferred); new proxy; larger sample.</td></tr>
+      </table>
+      <div class="subhead">Master Summary</div>
+      <table class="qr">
+        <tr><th>Violation</th><th>Coefficients</th><th>Std errors</th><th>Test / Fix</th></tr>
+        <tr><td>Conditional heterosk.</td><td>Consistent</td><td>Too small → t inflated</td><td>Breusch–Pagan / robust SEs</td></tr>
+        <tr><td>Serial correlation</td><td>Consistent*</td><td>Underestimated → t &amp; F inflated</td><td>DW, Breusch–Godfrey / Newey–West</td></tr>
+        <tr><td>Multicollinearity</td><td>Consistent, imprecise</td><td>Inflated → t insignificant</td><td>VIF / drop IV, proxy, bigger n</td></tr>
+      </table>
+      <div class="callout">*SC coefficients become inconsistent if a lagged DV is an IV. &nbsp;<strong>Exam tip:</strong> CH and positive SC <em>shrink</em> SEs (inflate t → false significance); multicollinearity <em>inflates</em> SEs (hides significance).</div>
+    </div>
+
+    <div class="panel walk" id="lm3-w">
+      <h4>The four learning outcomes</h4>
+      <ul>
+        <li><strong>(a)</strong> How misspecification affects results and how to avoid it.</li>
+        <li><strong>(b)</strong> <strong>Heteroskedasticity</strong> types and inference effects.</li>
+        <li><strong>(c)</strong> <strong>Serial correlation</strong> and inference effects.</li>
+        <li><strong>(d)</strong> <strong>Multicollinearity</strong> and its effects.</li>
+      </ul>
+      <p>LM1 gave the five assumptions; LM3 is what happens when three of them break.</p>
+      <h4>Part 1 — Specification Principles (LOS a)</h4>
+      <p>A good model is grounded in economic reasoning, parsimonious, performs well out-of-sample, has appropriate functional form, and satisfies the assumptions.</p>
+      <table>
+        <tr><th>Failure</th><th>Consequence</th></tr>
+        <tr><td><strong>Omitted variables</strong></td><td>If correlated with included IVs → biased/inconsistent coefficients; else errors may show CH/SC.</td></tr>
+        <tr><td><strong>Wrong functional form</strong></td><td>Ignoring non-linearity; transform variables; possible CH.</td></tr>
+        <tr><td><strong>Inappropriate scaling</strong></td><td>Possible heteroskedasticity or multicollinearity.</td></tr>
+        <tr><td><strong>Inappropriate pooling</strong></td><td>Mixing populations/regimes; possible CH and SC.</td></tr>
+      </table>
+      \[ \operatorname{Corr}(X_{\text{omitted}},X_{\text{included}})\neq 0 \;\Rightarrow\; \hat{b}\ \text{biased and inconsistent} \]
+      <h4>Part 2 — Heteroskedasticity (LOS b)</h4>
+      <p><strong>Definition:</strong> non-constant error variance (violates Assumption 2).</p>
+      <ul>
+        <li><strong>Unconditional:</strong> unrelated to IVs → no inference problem.</li>
+        <li><strong>Conditional (CH):</strong> correlated with IVs → the damaging type.</li>
+      </ul>
+      <p><strong>Effects of CH:</strong> coefficients still consistent; SEs biased (usually underestimated) → t-stats inflated → Type I error; F-test unreliable.</p>
+      <h5>Test — Breusch–Pagan</h5>
+      \[ \text{BP}=n\cdot R^2_{\text{resid}}\;\sim\;\chi^2_k \]
+      <p>Regress squared residuals on the IVs. \(H_0\): no CH. Right-tailed, \(df=k\).</p>
+      <h5>Fix</h5>
+      <p><strong>Robust / White / heteroskedasticity-consistent</strong> standard errors. Coefficients unchanged; only SEs corrected.</p>
+      <h4>Part 3 — Serial Correlation (LOS c)</h4>
+      <p><strong>Definition:</strong> errors correlated across observations (violates Assumption 3). Common in time series.</p>
+      <ul>
+        <li><strong>Positive SC:</strong> positive residual followed by positive (most common).</li>
+        <li><strong>Negative SC:</strong> positive followed by negative.</li>
+      </ul>
+      <p><strong>Effects:</strong> coefficients consistent — <em>unless</em> a lagged DV is an IV (then invalid). Positive SC underestimates SEs → t <em>and</em> F inflated → Type I error.</p>
+      <h5>Tests</h5>
+      \[ \text{DW}\approx 2(1-r) \]
+      <p>DW tests first-order only (DW=2 none; &lt;2 positive; &gt;2 negative). <strong>Breusch–Godfrey</strong> is more general (any lag).</p>
+      <h5>Fix</h5>
+      <p><strong>Newey–West</strong> (serial-correlation-consistent) SEs — also correct for CH.</p>
+      <h4>Part 4 — Multicollinearity (LOS d)</h4>
+      <p><strong>Definition:</strong> two+ IVs highly correlated / approximate linear relationship among IVs (violates Assumption 5).</p>
+      <p><strong>Effects:</strong> coefficients consistent but imprecise; SEs inflated → insignificant t-stats, yet a significant F and high \(R^2\). That contradiction is the tell.</p>
+      <h5>Detection — VIF</h5>
+      \[ \text{VIF}_j=\frac{1}{1-R^2_j} \]
+      <p>Min = 1; &gt;5 concerning; &gt;10 serious.</p>
+      <h5>Fix</h5>
+      <p>Drop a correlated IV (preferred); use a different proxy; increase sample size.</p>
+      <blockquote>If the goal is pure <strong>prediction</strong>, a significant model matters more than significant coefficients, so multicollinearity is less of a concern.</blockquote>
+      <h4>Master summary</h4>
+      <table>
+        <tr><th>Violation</th><th>Coefficients</th><th>SEs</th><th>Test</th><th>Fix</th></tr>
+        <tr><td>Conditional heterosk.</td><td>Consistent</td><td>Too small → t inflated</td><td>Breusch–Pagan (\(\chi^2\))</td><td>Robust / White SEs</td></tr>
+        <tr><td>Serial correlation</td><td>Consistent*</td><td>Underestimated → t &amp; F inflated</td><td>DW; Breusch–Godfrey</td><td>Newey–West SEs</td></tr>
+        <tr><td>Multicollinearity</td><td>Consistent, imprecise</td><td>Inflated → t insignificant</td><td>VIF</td><td>Drop IV / proxy / bigger n</td></tr>
+      </table>
+      <blockquote><strong>Exam tip:</strong> CH and positive SC <em>shrink</em> SEs → inflate t → false significance. Multicollinearity does the opposite: inflates SEs, hides true significance.</blockquote>
+    </div>
+  </section>
+
+  <!-- ==================== LM4 ==================== -->
+  <section class="module" id="lm4">
+    <div class="mod-head">
+      <h2>LM4 · Extensions of Multiple Regression</h2>
+      <div class="los"><strong>LOS:</strong> (a) influence analysis and detecting influential data points;
+        (b) qualitative independent variables (dummies);
+        (c) formulate and interpret a logistic regression model.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm4-f">Formulas</button>
+      <button class="subtab" data-panel="lm4-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm4-w">Walkthrough</button>
+    </div>
+
+    <div class="panel active" id="lm4-f">
+      <div class="formula"><div class="fname">Leverage measure — high-leverage threshold</div>
+        \[ h_{ii} > 3\left(\frac{k+1}{n}\right) \;\Rightarrow\; \text{potentially influential} \]
+        <div class="fnote">\(h_{ii}\) ranges 0–1; leverages sum to \(k+1\). Large samples use the tighter \(2\left(\frac{k+1}{n}\right)\) (Belsley, Kuh, Welsch 1980).</div></div>
+      <div class="formula"><div class="fname">Studentized residual — outlier detection</div>
+        \[ t_i^* = \frac{e_i^*}{s_{e^*}} \;\sim\; t_{\,n-k-2} \]
+        <div class="fnote">Delete obs. \(i\), refit on \(n-1\) cases. Flag if \(|t_i^*|>\) critical t (small samples) or \(|t_i^*|>3\) (large samples).</div></div>
+      <div class="formula"><div class="fname">Dummy variable forms</div>
+        \[ Y=b_0+b_1X+d_1D \quad\text{(intercept)} \]
+        \[ Y=b_0+b_1X+d_1(D\cdot X) \quad\text{(slope / interaction)} \]
+        \[ Y=b_0+b_1X+d_1D+d_2(D\cdot X) \quad\text{(both)} \]
+        <div class="fnote">\(D=0\) gives the base line; \(D=1\) shifts intercept and/or slope. Use \(m-1\) dummies for \(m\) categories.</div></div>
+      <div class="formula"><div class="fname">Odds &amp; logit (log odds)</div>
+        \[ \text{Odds}=\frac{P}{1-P}, \qquad \ln\!\left(\frac{P}{1-P}\right)=b_0+b_1X_1+\cdots+b_kX_k+\varepsilon \]
+        <div class="fnote">e.g. \(P=0.75 \Rightarrow\) odds \(=3\) (3 to 1). The log odds is the logit.</div></div>
+      <div class="formula"><div class="fname">Logistic function (recover probability)</div>
+        \[ P=\frac{1}{1+\exp\!\left[-(b_0+b_1X_1+\cdots+b_kX_k)\right]} \]
+        <div class="fnote">Sigmoidal, bounded 0–1. \(P\to1\) as linear term \(\to+\infty\); \(P\to0\) as \(\to-\infty\).</div></div>
+      <div class="formula"><div class="fname">Odds ratio</div>
+        \[ \text{Odds ratio}=e^{b_j} \]
+        <div class="fnote">Ratio of odds with a one-unit increase in \(X_j\) to odds without it. Odds ratios move exponentially with ΔIV.</div></div>
+      <div class="formula"><div class="fname">Likelihood ratio (LR) test — model fit</div>
+        \[ \text{LR}=-2\left(\text{LL}_{\text{restricted}}-\text{LL}_{\text{unrestricted}}\right)\;\sim\;\chi^2_{\,q} \]
+        <div class="fnote">\(q\)=# restrictions. \(H_0\): restricted model is better. Log-likelihood always negative; closer to 0 = better fit.</div></div>
+    </div>
+
+    <div class="panel" id="lm4-q">
+      <div class="subhead">Influence Analysis</div>
+      <table class="qr">
+        <tr><th>Concept</th><th>Super-short explanation</th></tr>
+        <tr><td>High-leverage point</td><td>Extreme value of an <strong>independent</strong> variable (X).</td></tr>
+        <tr><td>Outlier</td><td>Extreme value of the <strong>dependent</strong> variable (Y) — large residual.</td></tr>
+        <tr><td>Influential obs.</td><td>One whose removal materially changes the coefficients. An extreme point on the line may not be influential.</td></tr>
+        <tr><td>Leverage rule</td><td>Flag if \(h_{ii}>3(k+1)/n\) (large samples: \(2(k+1)/n\)).</td></tr>
+        <tr><td>Studentized residual</td><td>Delete-one refit; \(t^*\sim t_{n-k-2}\); flag \(|t^*|>3\) (large) or \(>\) critical t (small).</td></tr>
+      </table>
+      <div class="subhead">Qualitative Independent Variables</div>
+      <table class="qr">
+        <tr><th>Concept</th><th>Super-short explanation</th></tr>
+        <tr><td>Dummy variable</td><td>Takes value 0 or 1; use \(m-1\) for \(m\) categories (avoid the trap).</td></tr>
+        <tr><td>Intercept dummy</td><td>Shifts the intercept — a parallel shift of the line.</td></tr>
+        <tr><td>Slope dummy</td><td>Interaction term \(D\cdot X\); changes the slope.</td></tr>
+        <tr><td>Both</td><td>Shifts intercept <em>and</em> slope simultaneously.</td></tr>
+        <tr><td>Testing</td><td>Individual t-tests on each dummy coefficient.</td></tr>
+      </table>
+      <div class="subhead">Logistic Regression</div>
+      <table class="qr">
+        <tr><th>Concept</th><th>Super-short explanation</th></tr>
+        <tr><td>When to use</td><td>Binary/qualitative DV (fraud, bankruptcy). Linear model would break 0–1 bounds.</td></tr>
+        <tr><td>Log odds (logit)</td><td>Model \(\ln[P/(1-P)]\) as linear in the IVs.</td></tr>
+        <tr><td>Estimation</td><td><strong>MLE</strong>, not least squares; logistic error (fatter tails than normal).</td></tr>
+        <tr><td>Slope coefficient</td><td>Δ in <strong>log odds</strong> per unit ΔIV, <span class="tag-bad">holding all others constant.</span></td></tr>
+        <tr><td>Odds ratio</td><td>\(e^{b_j}\); log odds linear, odds exponential, probabilities non-linear.</td></tr>
+        <tr><td>Pseudo-\(R^2\)</td><td>No true \(R^2\); compare only same-DV specifications, same dataset.</td></tr>
+        <tr><td>LR test</td><td>\(-2(\text{LL}_R-\text{LL}_U)\sim\chi^2_q\); logistic analogue of the joint F-test.</td></tr>
+      </table>
+      <div class="callout"><strong>Exam tip:</strong> the slope in a logit model is the change in <em>log odds</em> "holding all other IVs constant" — reject distractors that say "odds" or "while all others increase by one unit." Marginal effect on <em>probability</em> is largest near \(P=0.5\).</div>
+    </div>
+
+    <div class="panel walk" id="lm4-w">
+      <h4>The three learning outcomes</h4>
+      <ul>
+        <li><strong>(a)</strong> <strong>Influence analysis</strong> and detecting influential data points.</li>
+        <li><strong>(b)</strong> Models with <strong>qualitative independent variables</strong> (dummies).</li>
+        <li><strong>(c)</strong> Formulate and interpret a <strong>logistic regression</strong>.</li>
+      </ul>
+      <p>LM4 stretches the toolkit three ways: unusual <em>observations</em>, qualitative <em>inputs</em>, and qualitative <em>outputs</em>.</p>
+
+      <h4>Part 1 — Influence Analysis (LOS a)</h4>
+      <h5>1.1 Two kinds of unusual observations</h5>
+      <table>
+        <tr><th>Type</th><th>What's extreme</th></tr>
+        <tr><td><strong>High-leverage point</strong></td><td>An extreme value of an <strong>independent</strong> variable (X).</td></tr>
+        <tr><td><strong>Outlier</strong></td><td>An extreme value of the <strong>dependent</strong> variable (Y) — a large residual.</td></tr>
+      </table>
+      <p>A point can be one, the other, or both. An extreme point that <strong>lies on the regression line may not be a problem</strong> — being unusual is not the same as being <em>influential</em>. An <strong>influential observation</strong> is one whose removal would materially change the coefficients.</p>
+      <h5>1.2 Detecting high leverage — \(h_{ii}\)</h5>
+      <p>Leverage \(h_{ii}\) measures how far obs. \(i\)'s X-values sit from the mean; it ranges 0–1 and leverages sum to \(k+1\).</p>
+      \[ h_{ii} > 3\left(\frac{k+1}{n}\right) \;\Rightarrow\; \text{potentially influential} \]
+      <p>Large samples use the tighter \(2\left(\frac{k+1}{n}\right)\) (Belsley, Kuh, Welsch 1980). Example: \(n=96,\ k=2\Rightarrow 3(3/96)=0.09375\) — anything above is flagged.</p>
+      <h5>1.3 Detecting outliers — studentized residuals</h5>
+      <p>Delete obs. \(i\), refit on the remaining \(n-1\), and compute:</p>
+      \[ t_i^* = \frac{e_i^*}{s_{e^*}} \;\sim\; t_{\,n-k-2} \]
+      <p>Flag if \(|t_i^*|>\) critical t (small samples, preferred) or \(|t_i^*|>3\) (large samples).</p>
+
+      <h4>Part 2 — Qualitative Independent Variables (LOS b)</h4>
+      <p>A <strong>dummy</strong> takes value 0 or 1. Use \(m-1\) dummies for \(m\) categories; the omitted category is the base captured by the intercept.</p>
+      <h5>Three ways a dummy enters</h5>
+      \[ Y=b_0+b_1X+d_1D \quad\text{(intercept dummy — parallel shift)} \]
+      \[ Y=b_0+b_1X+d_1(D\cdot X) \quad\text{(slope dummy — interaction)} \]
+      \[ Y=b_0+b_1X+d_1D+d_2(D\cdot X) \quad\text{(both)} \]
+      <p>With "both": \(D=0\Rightarrow Y=b_0+b_1X\); \(D=1\Rightarrow Y=(b_0+d_1)+(b_1+d_2)X\) — different intercept and slope. Significance is assessed with <strong>individual t-tests</strong> on each dummy.</p>
+
+      <h4>Part 3 — Logistic Regression (LOS c)</h4>
+      <h5>3.1 Why not OLS?</h5>
+      <p>With a <strong>binary DV</strong> (fraud/no-fraud, bankrupt/solvent), a linear probability model can predict \(P<0\) or \(P>1\) and the relationship isn't linear.</p>
+      <h5>3.2 Odds, log odds, logit</h5>
+      \[ \text{Odds}=\frac{P}{1-P}\qquad\left(P=0.75\Rightarrow\frac{0.75}{0.25}=3,\ \text{i.e. 3 to 1}\right) \]
+      \[ \ln\!\left(\frac{P}{1-P}\right)=b_0+b_1X_1+\cdots+b_kX_k+\varepsilon \]
+      \[ P=\frac{1}{1+\exp\!\left[-(b_0+b_1X_1+\cdots+b_kX_k)\right]} \]
+      <p>The curve is sigmoidal, bounded 0–1; the error follows a <strong>logistic distribution</strong> (fatter tails than normal).</p>
+      <h5>3.3 Estimation — MLE</h5>
+      <p>Coefficients are estimated by <strong>maximum likelihood</strong> (not least squares), choosing values that make the observed outcomes most likely; the likelihood uses the <strong>binomial</strong> distribution.</p>
+      <h5>3.4 Interpreting coefficients</h5>
+      <table>
+        <tr><th>Quantity</th><th>Interpretation</th></tr>
+        <tr><td>Slope \(b_j\)</td><td>Change in the <strong>log odds</strong> per one-unit change in \(X_j\), <strong>holding all other IVs constant</strong>.</td></tr>
+        <tr><td>Odds ratio</td><td>\(e^{b_j}\) — odds with a one-unit increase vs. without.</td></tr>
+      </table>
+      <p>As an IV changes: <strong>log odds</strong> move linearly, <strong>odds ratios</strong> exponentially, <strong>probabilities</strong> non-linearly (marginal effect largest near \(P=0.5\)).</p>
+      <h5>3.5 Goodness of fit — the LR test</h5>
+      <p>No \(R^2\); software reports a <strong>pseudo-\(R^2\)</strong>, usable only to compare same-DV specifications on the same data. For significance:</p>
+      \[ \text{LR}=-2\left(\text{LL}_{\text{restricted}}-\text{LL}_{\text{unrestricted}}\right)\;\sim\;\chi^2_{\,q} \]
+      <p>\(q\)=# restrictions; \(H_0\): the restricted model is better; rejecting favors the unrestricted model. Log-likelihood is always negative (closer to 0 = better), meaningful only relative to another same-DV model. Best in large samples.</p>
+
+      <h4>Exam-focus cheat sheet</h4>
+      \[ h_{ii}>3\left(\frac{k+1}{n}\right);\qquad t_i^*\sim t_{\,n-k-2},\ |t_i^*|>3 \text{ (large)} \]
+      \[ \ln\!\left(\frac{P}{1-P}\right)=b_0+\sum b_jX_j;\qquad P=\frac{1}{1+\exp[-(b_0+\sum b_jX_j)]} \]
+      \[ \text{LR}=-2(\text{LL}_R-\text{LL}_U)\sim\chi^2_{\,q} \]
+      <ul>
+        <li><strong>Leverage</strong> flags extreme <strong>X</strong>; <strong>studentized residual</strong> flags extreme <strong>Y</strong>.</li>
+        <li>Dummies: intercept = shift; slope (interaction) = tilt; use \(m-1\).</li>
+        <li>Logistic: binary DV → model log odds; estimate by <strong>MLE</strong>; slope = Δ log odds per unit ΔIV, all else constant; odds ratio \(=e^{b_j}\).</li>
+        <li>Fit: <strong>pseudo-\(R^2\)</strong> (same model) and the <strong>LR test</strong> (\(\chi^2\), \(q\) df).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== REFERENCE ==================== -->
+  <section class="module" id="ref">
+    <div class="mod-head">
+      <h2>★ Statistical Tests Reference — t vs. F vs. Chi-Square</h2>
+      <div class="los"><strong>Cross-cutting reference</strong> across LM2 (t &amp; F), LM3 (Breusch–Pagan \(\chi^2\)), LM4 (logistic LR test), and later time-series (Dickey–Fuller, ARCH).</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="ref-i">Intuition</button>
+      <button class="subtab" data-panel="ref-f">Statistics</button>
+      <button class="subtab" data-panel="ref-d">Decision Table</button>
+    </div>
+
+    <div class="panel active" id="ref-i">
+      <table class="qr">
+        <tr><th>Test</th><th>Use it for</th></tr>
+        <tr><td>t-test</td><td>A <strong>single</strong> parameter — one mean or one coefficient.</td></tr>
+        <tr><td>F-test</td><td><strong>Multiple</strong> parameters jointly, or a ratio of <strong>two variances</strong>.</td></tr>
+        <tr><td>Chi-square \(\chi^2\)</td><td>A <strong>single variance</strong>, <strong>counts/proportions</strong>, or spec tests (Breusch–Pagan, logistic LR).</td></tr>
+      </table>
+      <div class="callout"><strong>Why they differ:</strong> a \(t\) is a normal divided by a scaled chi-square; an \(F\) is a ratio of two chi-squares. Relatives, but different questions.</div>
+      <div class="subhead">Mental Shortcuts</div>
+      <table class="qr">
+        <tr><th>Shortcut</th><th>Rule</th></tr>
+        <tr><td>Count coefficients</td><td>"One" → t. "Several" → F.</td></tr>
+        <tr><td>Variance question</td><td>"Ratio of two variances" → F. "One variance vs. a number" → \(\chi^2\).</td></tr>
+        <tr><td>Counting things</td><td>Frequencies / categories → \(\chi^2\).</td></tr>
+        <tr><td>\(F=t^2\) link</td><td>For a single restriction, \(F=t^2\); they agree. F earns its keep with 2+ restrictions.</td></tr>
+        <tr><td>Tails</td><td>t can be one/two-tailed; F and \(\chi^2\) (variance/BP/LR) are <strong>right-tailed</strong>.</td></tr>
+      </table>
+    </div>
+
+    <div class="panel" id="ref-f">
+      <div class="formula"><div class="fname">t-test — one coefficient / mean</div>
+        \[ t=\frac{\hat{b}_j-B_j}{s_{\hat{b}_j}},\quad df=n-k-1 \]
+        <div class="fnote">One restriction. One- or two-tailed. Variance unknown.</div></div>
+      <div class="formula"><div class="fname">F-test — joint significance of coefficients</div>
+        \[ F=\frac{\text{MSR}}{\text{MSE}}=\frac{\text{SSR}/k}{\text{SSE}/(n-k-1)},\quad df=(k,\,n-k-1) \]
+        <div class="fnote">\(H_0: b_1=\cdots=b_k=0\). Right-tailed.</div></div>
+      <div class="formula"><div class="fname">F-test — equality of two variances</div>
+        \[ F=\frac{s_1^2}{s_2^2},\quad df=(n_1-1,\,n_2-1) \]
+        <div class="fnote">Ratio of two sample variances (larger over smaller). Right-tailed.</div></div>
+      <div class="formula"><div class="fname">Chi-square — single variance</div>
+        \[ \chi^2=\frac{(n-1)s^2}{\sigma_0^2},\quad df=n-1 \]
+        <div class="fnote">Tests one variance vs. hypothesized \(\sigma_0^2\). Right-tailed.</div></div>
+      <div class="formula"><div class="fname">Chi-square — goodness of fit / independence</div>
+        \[ \chi^2=\sum \frac{(O_i-E_i)^2}{E_i} \]
+        <div class="fnote">Observed vs. expected frequencies for categorical data.</div></div>
+      <div class="formula"><div class="fname">Chi-square — Breusch–Pagan (spec test)</div>
+        \[ \text{BP}=n\cdot R^2_{\text{resid}}\;\sim\;\chi^2_k \]
+        <div class="fnote">Conditional heteroskedasticity test (LM3). Right-tailed, \(df=k\).</div></div>
+      <div class="formula"><div class="fname">Chi-square — logistic likelihood ratio (LR)</div>
+        \[ \text{LR}=-2(\text{LL}_R-\text{LL}_U)\;\sim\;\chi^2_{\,q} \]
+        <div class="fnote">Logistic-regression model fit (LM4). \(q\)=# restrictions. Right-tailed.</div></div>
+    </div>
+
+    <div class="panel" id="ref-d">
+      <table class="qr">
+        <tr><th>Question</th><th>Use / statistic / df</th></tr>
+        <tr><td>One coefficient / mean ≠ value?</td><td><strong>t</strong> — \((\hat{b}_j-B_j)/s_{\hat{b}_j}\); \(df=n-k-1\)</td></tr>
+        <tr><td>Several coefficients jointly = 0?</td><td><strong>F</strong> — \(\text{MSR}/\text{MSE}\); \(df=(k,\,n-k-1)\)</td></tr>
+        <tr><td>Two populations — equal variance?</td><td><strong>F</strong> — \(s_1^2/s_2^2\); \(df=(n_1-1,\,n_2-1)\)</td></tr>
+        <tr><td>One variance = hypothesized value?</td><td><strong>\(\chi^2\)</strong> — \((n-1)s^2/\sigma_0^2\); \(df=n-1\)</td></tr>
+        <tr><td>Goodness of fit / independence?</td><td><strong>\(\chi^2\)</strong> — \(\sum(O-E)^2/E\); df varies</td></tr>
+        <tr><td>Conditional heteroskedasticity?</td><td><strong>\(\chi^2\)</strong> — BP \(n\cdot R^2_{\text{resid}}\); \(df=k\)</td></tr>
+        <tr><td>Logistic model fit?</td><td><strong>\(\chi^2\)</strong> — LR \(-2(\text{LL}_R-\text{LL}_U)\); \(df=q\)</td></tr>
+      </table>
+      <div class="callout"><strong>Looking ahead:</strong> in time-series, the <em>Dickey–Fuller</em> unit-root test uses a t-style statistic with special critical values, and the <em>ARCH</em> test is chi-square-based — the same families reappear.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  CFA Level II Review · Quantitative Methods LM1–LM4 + Statistical Tests Reference · Tabbed layout.
+  Content grounded in the 2026 CFA curriculum and Mark Meldrum notes. Formulas rendered with MathJax (needs internet on first load).
+</footer>
+
+<script>
+  document.querySelectorAll('.modtab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.modtab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.mod).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+  document.querySelectorAll('.subtab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.closest('.module');
+      group.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
+      group.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
