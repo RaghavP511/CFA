@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level II — Review</title>
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'none' },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+<style>
+  :root{
+    /* Shared palette - mirror of the Tailwind config in ../index.html
+       and the :root block in ../css/styles.css. Change all three together. */
+    --navy:#1c1b1a; --navy-2:#2a2725; --accent:#d99a2b; --accent-soft:#f5efe2;
+    --ink:#221f1e; --muted:#5a544e; --line:#e7e2dc; --bg:#f5f2ee; --card:#faf8f6;
+    --code-bg:#efe9e1; --green:#3f8f6b; --red:#c2564a; --teal:#3f9d8f;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.65;}
+
+  .topbar{background:var(--navy);color:#fff;padding:20px 40px;display:flex;align-items:center;
+    justify-content:space-between;box-shadow:0 2px 8px rgba(28,27,26,.18);position:sticky;top:0;z-index:50;}
+  .topbar h1{margin:0;font-size:20px;letter-spacing:.3px;}
+  .topbar .tag{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;}
+
+  .modtabs{display:flex;gap:6px;background:var(--navy-2);padding:0 40px;position:sticky;top:64px;z-index:49;
+    box-shadow:0 2px 6px rgba(28,27,26,.14);flex-wrap:wrap;}
+  .modtab{background:transparent;border:none;color:#cdc6bd;font-size:14px;font-weight:600;
+    padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;font-family:inherit;}
+  .modtab:hover{color:#fff;background:rgba(255,255,255,.05);}
+  .modtab.active{color:#fff;border-bottom-color:var(--accent);}
+  .modtab .num{color:var(--accent);font-weight:700;margin-right:6px;}
+  .modtab.ref{margin-left:auto;color:#7cc0b4;}
+  .modtab.ref.active{border-bottom-color:var(--green);}
+
+  main{max-width:1000px;margin:0 auto;padding:36px 40px 90px;}
+  .module{display:none;animation:fade .25s ease;}
+  .module.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .mod-head{margin-bottom:6px;}
+  .mod-head h2{margin:0 0 4px;font-size:26px;color:var(--navy);}
+  .mod-head .los{font-size:13px;color:var(--muted);background:var(--code-bg);border-left:3px solid var(--accent);
+    padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0 0;}
+  .mod-head .los strong{color:var(--ink);}
+
+  .subtabs{display:flex;gap:4px;margin:26px 0 22px;border-bottom:2px solid var(--line);flex-wrap:wrap;}
+  .subtab{background:transparent;border:none;font-family:inherit;font-size:13px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.8px;color:var(--muted);padding:10px 18px;cursor:pointer;
+    border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;}
+  .subtab:hover{color:var(--navy);}
+  .subtab.active{color:var(--navy);border-bottom-color:var(--accent);}
+  .subtab.walk.active{border-bottom-color:var(--green);}
+
+  .panel{display:none;animation:fade .2s ease;}
+  .panel.active{display:block;}
+
+  .formula{border:1px solid var(--line);border-radius:9px;padding:14px 18px 6px;margin-bottom:14px;background:#fcfdff;}
+  .formula .fname{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+  .formula .fnote{font-size:12.5px;color:var(--muted);margin-top:-2px;}
+  .mjx-container{overflow-x:auto;overflow-y:hidden;}
+
+  table.qr{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;}
+  table.qr th{background:var(--navy);color:#fff;text-align:left;padding:10px 14px;font-weight:600;font-size:13px;}
+  table.qr th:first-child{border-radius:8px 0 0 0;width:24%;}
+  table.qr th:last-child{border-radius:0 8px 0 0;}
+  table.qr td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.qr td:first-child{font-weight:600;color:var(--navy);}
+  table.qr tr:nth-child(even) td{background:#fafcfe;}
+  .tag-good{color:var(--green);font-weight:600;}
+  .tag-bad{color:var(--red);font-weight:600;}
+
+  .callout{background:var(--accent-soft);border-radius:9px;padding:12px 16px;font-size:13.5px;color:#6b551a;margin:16px 0;}
+  .callout strong{color:#4d3d10;}
+
+  .subhead{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;text-transform:uppercase;
+    letter-spacing:1px;color:var(--navy);margin:26px 0 14px;}
+  .subhead::before{content:"";width:18px;height:18px;background:var(--accent);border-radius:4px;flex-shrink:0;}
+
+  .walk h4{color:var(--navy);font-size:16px;margin:26px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line);}
+  .walk h5{color:var(--navy-2);font-size:14px;margin:20px 0 6px;}
+  .walk p{font-size:14px;margin:10px 0;}
+  .walk ul{font-size:14px;margin:8px 0;padding-left:22px;}
+  .walk li{margin:5px 0;}
+  .walk table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0;}
+  .walk table th{background:var(--navy-2);color:#fff;text-align:left;padding:8px 12px;font-size:12.5px;}
+  .walk table td{padding:8px 12px;border-bottom:1px solid var(--line);}
+  .walk table tr:nth-child(even) td{background:#f7fafd;}
+  .walk blockquote{border-left:3px solid var(--accent);background:var(--accent-soft);margin:14px 0;
+    padding:10px 16px;border-radius:0 6px 6px 0;font-size:13.5px;color:#6b551a;}
+  .walk blockquote strong{color:#4d3d10;}
+
+  footer.foot{max-width:1000px;margin:0 auto;padding:0 40px 50px;font-size:12px;color:var(--muted);}
+
+  @media(max-width:720px){
+    .topbar,.modtabs,main,footer.foot{padding-left:18px;padding-right:18px;}
+    .modtab{padding:12px 12px;font-size:13px;}
+  }
+</style>
+<style>
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:10px 0;}
+  details.faq summary{cursor:pointer;font-weight:600;color:var(--ink);}
+  details.faq summary::marker{color:var(--accent);}
+  details.faq .a{margin-top:10px;color:var(--muted);}
+  .q{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:8px;padding:14px 16px;margin:12px 0;}
+  .q .stem{font-weight:600;margin-bottom:8px;}
+  .q ol{margin:6px 0 0 20px;}
+  .q details{margin-top:10px;}
+  .q details summary{cursor:pointer;color:var(--teal);font-weight:600;}
+  .q .ans{margin-top:8px;color:var(--ink);}
+  .q .ans .right{color:var(--green);font-weight:700;}
+  .q .ans .wrong{color:var(--red);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>CFA Level II &mdash; Review</h1>
+  <span class="tag">Fixed Income</span>
+</div>
+
+<div class="modtabs" id="modtabs">
+  <button class="modtab active" data-mod="lm1"><span class="num">LM1</span>Term Structure</button>
+  <button class="modtab" data-mod="lm2"><span class="num">LM2</span>Arbitrage-Free Valuation</button>
+  <button class="modtab" data-mod="lm3"><span class="num">LM3</span>Embedded Options</button>
+  <button class="modtab" data-mod="lm4"><span class="num">LM4</span>Credit Analysis Models</button>
+  <button class="modtab" data-mod="lm5"><span class="num">LM5</span>Credit Default Swaps</button>
+</div>
+
+<main>
+
+  <!-- ==================== LM1 ==================== -->
+  <section class="module active" id="lm1">
+    <div class="mod-head">
+      <h2>LM1 &middot; The Term Structure and Interest Rate Dynamics</h2>
+      <div class="los"><strong>LOS:</strong> (a) spot, forward, YTM, expected and realized returns and curve shape;
+        (b) bootstrapping spot rates from the par curve; (c) evolution of spot rates implied by forwards;
+        (d) rolling down the yield curve; (e) the swap rate curve; (f, g) spreads; (h) term structure theories;
+        (i) yield curve factors and (j) key rate duration.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm1-f">Formulas</button>
+      <button class="subtab" data-panel="lm1-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm1-w">Walkthrough</button>
+      <button class="subtab" data-panel="lm1-faq">FAQs</button>
+      <button class="subtab" data-panel="lm1-p">Practice</button>
+    </div>
+
+    <div class="panel active" id="lm1-f">
+      <div class="formula"><div class="fname">Discount factor from a spot rate</div>
+        \[ DF_T=\frac{1}{(1+z_T)^{T}} \]
+        <div class="fnote">\(z_T\) is the annualized \(T\)-year spot rate on an option-free, default-risk-free zero.</div></div>
+      <div class="formula"><div class="fname">Forward rate model</div>
+        \[ (1+z_{A+B})^{A+B}=(1+z_A)^{A}\,\bigl(1+f_{A,B}\bigr)^{B} \]
+        <div class="fnote">\(f_{A,B}\) = rate agreed today on a \(B\)-year loan starting in \(A\) years. Read the subscripts as "start, tenor".</div></div>
+      <div class="formula"><div class="fname">Forward rate, solved</div>
+        \[ f_{A,B}=\left[\frac{(1+z_{A+B})^{A+B}}{(1+z_A)^{A}}\right]^{1/B}-1 \]</div>
+      <div class="formula"><div class="fname">Forward price of a zero (forward pricing model)</div>
+        \[ P_{A,B}=\frac{P_{A+B}}{P_A} \]
+        <div class="fnote">\(P_T\) is today's price of a \(T\)-year zero per 1 of par.</div></div>
+      <div class="formula"><div class="fname">Bootstrapping the next spot rate</div>
+        \[ 100=\sum_{t=1}^{T-1}\frac{C}{(1+z_t)^t}+\frac{100+C}{(1+z_T)^{T}} \]
+        <div class="fnote">Par bond, so price = 100 and \(C\) = the par rate. Solve forward one maturity at a time.</div></div>
+      <div class="formula"><div class="fname">Rolling down the yield curve</div>
+        \[ r_{\text{roll}}=\underbrace{\text{coupon yield}}_{\text{carry}}+\underbrace{\frac{P_{\text{end}}-P_{\text{begin}}}{P_{\text{begin}}}}_{\text{price effect of aging into a lower yield}} \]
+        <div class="fnote">Works only if the curve is upward sloping <em>and</em> does not shift.</div></div>
+      <div class="formula"><div class="fname">Swap spread</div>
+        \[ \text{Swap spread}= \text{swap fixed rate}-\text{government YTM (same maturity)} \]</div>
+      <div class="formula"><div class="fname">I-spread, Z-spread, TED, Libor&ndash;OIS</div>
+        \[ \text{I-spread}=\text{bond YTM}-\text{swap rate};\qquad
+           P=\sum_{t}\frac{CF_t}{(1+z_t+Z)^{t}} \]
+        <div class="fnote">The Z-spread is the constant add-on to every spot rate that makes discounted cash flows equal price. TED = 3M Libor &minus; 3M T-bill; Libor&ndash;OIS = 3M Libor &minus; OIS rate. Both are money-market stress gauges.</div></div>
+      <div class="formula"><div class="fname">Key rate duration</div>
+        \[ \% \Delta P \approx -\sum_{i} \text{KeyRateDur}_i \times \Delta z_i \]
+        <div class="fnote">Effective duration answers a parallel shift; key rate durations answer a shift at one maturity.</div></div>
+      <div class="formula"><div class="fname">Three-factor decomposition of curve moves</div>
+        \[ \Delta \text{curve}\approx \underbrace{L}_{\text{level}}+\underbrace{S}_{\text{steepness}}+\underbrace{C}_{\text{curvature}} \]
+        <div class="fnote">Level explains the large majority of the variance in curve changes.</div></div>
+    </div>
+
+    <div class="panel" id="lm1-q">
+      <div class="subhead">The four curves</div>
+      <table>
+        <tr><th>Curve</th><th>What it plots</th><th>Watch for</th></tr>
+        <tr><td>Spot (zero)</td><td>YTM on zero-coupon, default-risk-free bonds</td><td>No reinvestment risk, so stated yield = realized yield if held to maturity</td></tr>
+        <tr><td>Par</td><td>YTM on coupon bonds priced at par, so coupon = YTM</td><td>Built from on-the-run issues; spot rates come out of it by bootstrapping</td></tr>
+        <tr><td>Forward</td><td>Rates contracted today for future periods</td><td>\(f_{A,B}\): first subscript is when it starts, second is how long it lasts</td></tr>
+        <tr><td>Swap rate</td><td>Fixed rate that sets a par swap value to zero</td><td>Used as a benchmark where a government curve is thin or distorted</td></tr>
+      </table>
+
+      <div class="subhead">Curve shape and what forwards imply</div>
+      <table>
+        <tr><th>If the spot curve is&hellip;</th><th>Then forwards are&hellip;</th><th>And</th></tr>
+        <tr><td>Upward sloping</td><td>Above spot rates</td><td>Forwards imply future spot rates will rise</td></tr>
+        <tr><td>Flat</td><td>Equal to spot rates</td><td>No implied change</td></tr>
+        <tr><td>Downward sloping</td><td>Below spot rates</td><td>Forwards imply future spot rates will fall</td></tr>
+      </table>
+      <div class="callout"><strong>The active management hook:</strong> if you believe future spot rates will be <em>lower</em> than today's forward rates imply, the forward contract is cheap to you and you buy it. Outperformance comes from the forward curve being wrong, not from the curve being upward sloping.</div>
+
+      <div class="subhead">Term structure theories</div>
+      <table>
+        <tr><th>Theory</th><th>Claim</th><th>Implied curve</th></tr>
+        <tr><td>Pure (unbiased) expectations</td><td>Forwards are unbiased forecasts of future spot rates; investors are risk neutral</td><td>Any shape</td></tr>
+        <tr><td>Local expectations</td><td>Risk neutrality over the short holding period only; all bonds earn the risk-free rate short term</td><td>Any shape</td></tr>
+        <tr><td>Liquidity preference</td><td>Expectations plus a liquidity premium that grows with maturity</td><td>Upward bias</td></tr>
+        <tr><td>Segmented markets</td><td>Supply and demand in each maturity bucket set that rate; no substitution</td><td>Any shape</td></tr>
+        <tr><td>Preferred habitat</td><td>Investors leave their preferred maturity only for compensation</td><td>Any shape; premiums need not rise with maturity</td></tr>
+      </table>
+
+      <div class="subhead">Spreads at a glance</div>
+      <table>
+        <tr><th>Spread</th><th>Measured against</th><th>Reads as</th></tr>
+        <tr><td>G-spread</td><td>Government YTM, same maturity</td><td>Credit and liquidity of the issuer</td></tr>
+        <tr><td>I-spread</td><td>Swap rate, same maturity</td><td>Credit, stripped of government-specific effects</td></tr>
+        <tr><td>Z-spread</td><td>Entire spot curve</td><td>Constant add-on to every spot rate; no single-maturity distortion</td></tr>
+        <tr><td>TED</td><td>3M Libor &minus; 3M T-bill</td><td>Perceived bank credit risk</td></tr>
+        <tr><td>Libor&ndash;OIS</td><td>3M Libor &minus; OIS</td><td>Money-market funding stress</td></tr>
+      </table>
+    </div>
+
+    <div class="panel" id="lm1-w">
+      <h4>Part 1 &mdash; Spot, forward and the model that links them (LOS a, b)</h4>
+      <p>Everything in this module hangs off one identity: investing for \(A+B\) years at the spot rate must equal investing for \(A\) years at the spot rate and then rolling into a forward contract for \(B\) years. If it did not, you could arbitrage the difference.</p>
+      \[ (1+z_{A+B})^{A+B}=(1+z_A)^{A}(1+f_{A,B})^{B} \]
+      <p>Read the subscripts carefully, because this is where marks are lost. \(f_{2,1}\) is a one-year rate starting two years from now. \(f_{1,2}\) is a two-year rate starting one year from now. Same three-year horizon, different animals.</p>
+      <p><strong>Bootstrapping</strong> goes the other way: from observable par rates to unobservable spot rates. Take the one-year par rate as the one-year spot. Then price the two-year par bond at 100, discount the first coupon at the known one-year spot, and solve for the two-year spot that makes the remainder work. Repeat.</p>
+
+      <h4>Part 2 &mdash; YTM is not a return (LOS c)</h4>
+      <p>YTM is only the realized return if three things hold: you hold to maturity, the issuer makes every payment, and you reinvest every coupon at the YTM. A zero-coupon bond satisfies the third by construction, which is exactly why the spot curve is built from zeros.</p>
+      <p>On an upward-sloping curve, YTM sits below the longest spot rate, because it is a blended discount rate across the whole cash flow stream.</p>
+
+      <h4>Part 3 &mdash; Rolling down the yield curve (LOS d)</h4>
+      <p>If the curve is upward sloping and stays put, a bond ages into a lower yield. Its price rises toward par from below the horizon yield, and that price gain sits on top of the coupon. Buy longer than your horizon, sell before maturity, capture the roll.</p>
+      <div class="callout"><strong>Trap:</strong> the strategy depends on the curve <em>not</em> shifting. It is a bet on a stable, upward-sloping curve, not a free lunch. A parallel upward shift can wipe out the roll entirely.</div>
+
+      <h4>Part 4 &mdash; The swap rate curve (LOS e)</h4>
+      <p>Why use swaps as the benchmark rather than governments? Swap rates reflect private-sector credit, the market is deep at many maturities, there is no on-the-run/off-the-run distortion, and no government has to issue at that maturity for the rate to exist. Banks in particular hedge in swaps, so swaps are their natural benchmark. Investors who own government bonds outright tend to prefer the government curve.</p>
+      <p>The <strong>swap spread</strong> is the swap fixed rate minus the government yield of the same maturity. It widens when credit or funding conditions deteriorate.</p>
+
+      <h4>Part 5 &mdash; Spreads (LOS f, g)</h4>
+      <p>The G-spread and I-spread each compare one yield to one benchmark yield, which embeds whatever distortion sits in that single maturity. The Z-spread avoids the problem by adding a constant to every spot rate and solving for the constant that reproduces the market price. That makes it the cleaner measure when the curve is steep.</p>
+
+      <h4>Part 6 &mdash; Theories and factors (LOS h, i, j)</h4>
+      <p>The theories differ in one question: do forward rates contain a risk premium, and if so, does it grow with maturity? Pure expectations says no premium. Liquidity preference says yes and it grows. Preferred habitat says yes but it need not grow monotonically, because the premium comes from supply and demand imbalances in each maturity bucket.</p>
+      <p>Empirically, curve movements decompose into level, steepness and curvature, with level dominating. Effective duration captures only a parallel shift, which is why <strong>key rate durations</strong> exist: they tell you the exposure to a move at one specific point on the curve, and they sum to approximately the effective duration.</p>
+    </div>
+
+    <div class="panel" id="lm1-faq">
+      <details class="faq"><summary>Why does \(f_{1,2}\) not mean "the forward rate in two years for one year"?</summary>
+        <div class="a">The first subscript is always the start date and the second is always the tenor. \(f_{1,2}\) starts in one year and lasts two years. If a vignette gives you \(z_1\) and \(z_3\), the rate you can back out is \(f_{1,2}\), not \(f_{2,1}\). Getting this backwards produces a number that looks plausible and is wrong.</div></details>
+      <details class="faq"><summary>If the curve is upward sloping, does that mean rates are expected to rise?</summary>
+        <div class="a">Only under pure expectations. Under liquidity preference the upward slope can be entirely a term premium with flat expected rates. The exam likes to ask what an upward slope "implies" and the answer depends on which theory you are told to assume.</div></details>
+      <details class="faq"><summary>When is the Z-spread better than the G-spread?</summary>
+        <div class="a">When the curve is steep or the bond's cash flows are spread across many maturities. The G-spread compares to a single point on the curve, so a steep curve makes it maturity-dependent. The Z-spread uses the whole curve, so it is not distorted by which single benchmark you picked.</div></details>
+      <details class="faq"><summary>Do key rate durations replace effective duration?</summary>
+        <div class="a">No, they decompose it. Effective duration answers "what if the whole curve moves 1%". Key rate durations answer "what if only the 5-year point moves". They sum to roughly the effective duration, and they are the tool for non-parallel shifts.</div></details>
+      <details class="faq"><summary>Can rolling down the curve lose money?</summary>
+        <div class="a">Yes. The roll return assumes the curve is unchanged at the horizon. If rates rise, the price loss can exceed the coupon plus roll. It is a positive-carry trade with duration risk attached, not an arbitrage.</div></details>
+    </div>
+
+    <div class="panel" id="lm1-p">
+      <div class="q">
+        <div class="stem">1. Spot rates are \(z_1=4\%\), \(z_2=5\%\) and \(z_3=6\%\), annually compounded. The one-year forward rate two years forward, \(f_{2,1}\), is <em>closest</em> to:</div>
+        <ol type="A"><li>6.0%</li><li>7.0%</li><li>8.0%</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">C is correct.</span>
+          \[ f_{2,1}=\frac{(1.06)^3}{(1.05)^2}-1=\frac{1.191016}{1.1025}-1=0.0803 \]
+          Roughly 8.03%. <span class="wrong">A</span> is the three-year spot rate itself. <span class="wrong">B</span> comes from using \((1.06)^3/(1.04)^1\) style mismatched exponents.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">2. An analyst observes an upward-sloping, stable yield curve and buys a 5-year bond intending to sell it in one year. Absent any curve shift, the expected one-year return will <em>most likely</em> be:</div>
+        <ol type="A"><li>equal to the bond's YTM</li><li>greater than the bond's YTM</li><li>equal to the one-year spot rate</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> The bond ages from a 5-year yield to a 4-year yield, which on an upward-sloping curve is lower, so the price rises. That roll-down price gain is added to the coupon, producing a return above YTM. <span class="wrong">A</span> would hold only on a flat curve. <span class="wrong">C</span> is what pure expectations implies for a risk-neutral world with no roll.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">3. A bond trades at a G-spread of 120 bps and a Z-spread of 145 bps. The difference is <em>best</em> explained by:</div>
+        <ol type="A"><li>the bond's embedded option</li><li>the shape of the spot curve</li><li>a deterioration in the issuer's credit</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> The G-spread compares the bond's YTM to a single government yield; the Z-spread is applied to every spot rate. When the curve is not flat the two diverge, and the gap widens with the steepness of the curve. <span class="wrong">A</span> describes the OAS-versus-Z-spread difference, not this one. <span class="wrong">C</span> would move both spreads together.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">4. Which theory is <em>most consistent</em> with a term premium that does not increase monotonically with maturity?</div>
+        <ol type="A"><li>Liquidity preference theory</li><li>Pure expectations theory</li><li>Preferred habitat theory</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">C is correct.</span> Under preferred habitat the premium reflects supply and demand imbalances in each maturity bucket, so it can be larger at 7 years than at 10. <span class="wrong">A</span> requires the premium to grow with maturity. <span class="wrong">B</span> has no premium at all.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">5. A portfolio has an effective duration of 6.0. Its 2-year key rate duration is 1.0, its 5-year is 2.5 and its 10-year is 2.5. If only the 10-year spot rate rises by 25 bps, the portfolio value change is <em>closest</em> to:</div>
+        <ol type="A"><li>&minus;0.63%</li><li>&minus;1.50%</li><li>&minus;0.25%</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> \(-2.5\times0.0025=-0.00625\), about &minus;0.63%. <span class="wrong">B</span> applies the full effective duration, which is only right for a parallel shift. <span class="wrong">C</span> ignores the duration entirely.</div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="module" id="lm2">
+    <div class="mod-head">
+      <h2>LM2 &middot; The Arbitrage-Free Valuation Framework</h2>
+      <div class="los"><strong>LOS:</strong> (a) what arbitrage-free valuation means; (b) value an option-free coupon bond;
+        (c, d) the binomial interest rate tree and its calibration; (e) backward induction; (f) lattice versus zero curve;
+        (g) pathwise valuation; (h) Monte Carlo forward-rate simulation; (i) term structure models.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm2-f">Formulas</button>
+      <button class="subtab" data-panel="lm2-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm2-w">Walkthrough</button>
+      <button class="subtab" data-panel="lm2-faq">FAQs</button>
+      <button class="subtab" data-panel="lm2-p">Practice</button>
+    </div>
+
+    <div class="panel active" id="lm2-f">
+      <div class="formula"><div class="fname">Arbitrage-free value of an option-free bond</div>
+        \[ V_0=\sum_{t=1}^{T}\frac{CF_t}{(1+z_t)^{t}} \]
+        <div class="fnote">Every cash flow discounted at <em>its own</em> spot rate. Using one YTM for all of them is the shortcut that creates the arbitrage.</div></div>
+      <div class="formula"><div class="fname">Backward induction at a node</div>
+        \[ V_{\text{node}}=\frac{1}{2}\left[\frac{V_{u}+C_{u}}{1+i_{\text{node}}}+\frac{V_{d}+C_{d}}{1+i_{\text{node}}}\right] \]
+        <div class="fnote">Risk-neutral probabilities are 50/50 by construction in the standard lognormal tree. Discount at the rate <em>at that node</em>, not the forward.</div></div>
+      <div class="formula"><div class="fname">Lognormal spacing of rates within a period</div>
+        \[ i_{u}=i_{d}\,e^{2\sigma},\qquad\text{more generally}\qquad i_{n,j}=i_{n,0}\,e^{2j\sigma} \]
+        <div class="fnote">\(\sigma\) is the assumed interest rate volatility per period. Lognormality keeps rates positive and makes higher rates more volatile in absolute terms.</div></div>
+      <div class="formula"><div class="fname">Calibration condition</div>
+        \[ \text{Tree value of each benchmark par bond}=100 \]
+        <div class="fnote">Solve period by period for the rate level that reproduces the benchmark curve, given \(\sigma\). This is what makes the tree arbitrage-free.</div></div>
+      <div class="formula"><div class="fname">Pathwise valuation</div>
+        \[ V_0=\frac{1}{N}\sum_{p=1}^{N}V_p,\qquad N=2^{\,n-1} \]
+        <div class="fnote">\(n\) periods gives \(2^{n-1}\) paths. Average the path values; the answer matches backward induction exactly.</div></div>
+      <div class="formula"><div class="fname">Monte Carlo with a drift adjustment</div>
+        \[ V_0=\frac{1}{K}\sum_{k=1}^{K}\sum_{t}\frac{CF_{t,k}}{\prod_{s\le t}\bigl(1+r_{s,k}+\delta\bigr)} \]
+        <div class="fnote">\(\delta\) is the constant added to every simulated rate so the model reprices the benchmark bonds. Without it the simulation is not arbitrage-free.</div></div>
+    </div>
+
+    <div class="panel" id="lm2-q">
+      <div class="subhead">The one idea</div>
+      <div class="callout">Two portfolios with identical future cash flows must have the same price today. Value of the whole = sum of the values of the parts. If a coupon bond's price differs from the sum of its stripped cash flows valued at spot rates, you can strip or reconstitute and take the difference risk free.</div>
+
+      <div class="subhead">Three valuation routes, one answer</div>
+      <table>
+        <tr><th>Method</th><th>Handles</th><th>Notes</th></tr>
+        <tr><td>Zero-coupon (spot) curve</td><td>Option-free, fixed cash flows only</td><td>Fastest. Breaks as soon as cash flows depend on the rate path.</td></tr>
+        <tr><td>Binomial lattice, backward induction</td><td>Option-free and embedded options</td><td>Rates evolve, so early-exercise decisions can be made at each node.</td></tr>
+        <tr><td>Pathwise valuation</td><td>Same as the lattice</td><td>Average over \(2^{n-1}\) paths; identical answer, easier to see the logic.</td></tr>
+        <tr><td>Monte Carlo forward-rate simulation</td><td>Path-dependent cash flows (MBS prepayments)</td><td>The lattice cannot handle path dependency; this can.</td></tr>
+      </table>
+
+      <div class="subhead">Term structure models</div>
+      <table>
+        <tr><th>Model</th><th>Type</th><th>Key feature</th></tr>
+        <tr><td>Cox&ndash;Ingersoll&ndash;Ross</td><td>Equilibrium</td><td>Mean reversion; volatility scales with \(\sqrt{r}\), so rates cannot go negative</td></tr>
+        <tr><td>Vasicek</td><td>Equilibrium</td><td>Mean reversion with constant volatility; rates <em>can</em> go negative</td></tr>
+        <tr><td>Ho&ndash;Lee</td><td>Arbitrage-free</td><td>Calibrated to fit the observed curve exactly; constant volatility, no mean reversion</td></tr>
+        <tr><td>Kalotay&ndash;Williams&ndash;Fabozzi</td><td>Arbitrage-free</td><td>Lognormal short rate, so rates stay positive</td></tr>
+      </table>
+      <div class="callout"><strong>Equilibrium versus arbitrage-free:</strong> equilibrium models start from economic assumptions and produce a curve that generally will <em>not</em> match the market. Arbitrage-free models take today's curve as given and fit it exactly. For pricing a specific bond against the market, you want arbitrage-free.</div>
+    </div>
+
+    <div class="panel" id="lm2-w">
+      <h4>Part 1 &mdash; What "arbitrage-free" actually means (LOS a, b)</h4>
+      <p>Two arbitrage types matter here. <strong>Value additivity</strong>: the whole must equal the sum of the parts, which is what strip-and-reconstitute trades enforce in the Treasury market. <strong>Dominance</strong>: a risk-free asset cannot offer a higher return than another risk-free asset. Violate either and there is a free lunch.</p>
+      <p>The practical consequence for LOS b: discount each coupon at the spot rate matching its own date, not at a single YTM. On a sloped curve the two answers differ, and the spot-rate answer is the arbitrage-free one.</p>
+
+      <h4>Part 2 &mdash; Why we need a tree at all (LOS c)</h4>
+      <p>The spot curve prices fixed cash flows. It cannot price a bond whose cash flows depend on where rates go, because there is no single future to discount. The binomial tree fixes this by giving rates a set of future states with probabilities attached.</p>
+      <p>Construction: at each node, the up rate and down rate are separated by \(e^{2\sigma}\), with equal 50% risk-neutral probabilities. Lognormal spacing keeps rates positive and makes absolute volatility rise with the rate level, which matches how rates actually behave.</p>
+
+      <h4>Part 3 &mdash; Calibration is the whole game (LOS d)</h4>
+      <p>An uncalibrated tree is just a picture. Calibration forces it to reprice the benchmark curve: you choose the rate level at each period so that valuing each benchmark par bond through the tree returns exactly 100. Volatility \(\sigma\) is an input; the rate levels are the unknowns you solve for.</p>
+      <p>Once calibrated, the tree is arbitrage-free with respect to today's curve. Any bond you then value through it is priced consistently with the market.</p>
+
+      <h4>Part 4 &mdash; Backward induction (LOS e)</h4>
+      <p>Start at maturity where the value is known, work leftward. At each node take the expected value of the two next-period outcomes including their cash flows, discount one period at the rate <em>at that node</em>. Two errors cost marks: discounting at the wrong node's rate, and forgetting to add the coupon before discounting.</p>
+
+      <h4>Part 5 &mdash; Pathwise and Monte Carlo (LOS g, h)</h4>
+      <p>Pathwise valuation enumerates every route through the tree, \(2^{n-1}\) of them for \(n\) periods, values the bond along each path, and averages. It gives the same answer as backward induction for path-independent bonds, and it makes the mechanics obvious.</p>
+      <p>Monte Carlo exists for one reason: <strong>path dependency</strong>. A mortgage-backed security's prepayments depend on the path rates took to get here, not just on today's rate. A lattice cannot represent that; a simulation of thousands of forward-rate paths can. The simulation must be forced to reprice the benchmarks, which is done by adding a constant drift term \(\delta\) to every simulated rate until it does.</p>
+      <div class="callout"><strong>Trap:</strong> more Monte Carlo paths reduce statistical noise. They do not fix a wrong model or wrong prepayment assumptions. Precision is not accuracy.</div>
+
+      <h4>Part 6 &mdash; Term structure models (LOS i)</h4>
+      <p>Equilibrium models (CIR, Vasicek) derive the curve from assumptions about the short rate process and the economy. They are parsimonious but will not match the observed curve. Arbitrage-free models (Ho&ndash;Lee, KWF) start from the observed curve and fit it exactly, which is what you need for relative-value pricing. CIR's \(\sqrt{r}\) volatility term keeps rates non-negative; Vasicek's constant volatility does not.</p>
+    </div>
+
+    <div class="panel" id="lm2-faq">
+      <details class="faq"><summary>If backward induction and pathwise valuation give the same answer, why learn both?</summary>
+        <div class="a">They only agree for path-independent securities. The moment cash flows depend on the route taken - MBS prepayments being the standard case - pathwise thinking generalises to Monte Carlo and backward induction does not. The exam also tests the mechanics of both directly.</div></details>
+      <details class="faq"><summary>Where does the 50/50 probability come from? Real rate moves aren't coin flips.</summary>
+        <div class="a">They are risk-neutral probabilities, not real-world ones. The tree is calibrated so that using 50/50 reproduces observed market prices. All the information about the real-world drift is absorbed into the calibrated rate levels.</div></details>
+      <details class="faq"><summary>Does raising the volatility assumption change the value of an option-free bond?</summary>
+        <div class="a">No. Recalibrating with a higher \(\sigma\) spreads the rates out but the tree still reprices the benchmarks exactly, so an option-free bond's value is unchanged. Volatility only matters once there is an option in the bond - which is LM3.</div></details>
+      <details class="faq"><summary>Why can't Monte Carlo just be run without the drift adjustment?</summary>
+        <div class="a">Because an unadjusted simulation will not reprice the benchmark bonds, which means it is not arbitrage-free and any relative-value conclusion from it is unreliable. The constant \(\delta\) is added to every simulated rate until the model reproduces market prices.</div></details>
+      <details class="faq"><summary>Which is "better", an equilibrium or an arbitrage-free model?</summary>
+        <div class="a">Neither in the abstract. Arbitrage-free models fit today's curve exactly, which is what you want to price a bond relative to the market. Equilibrium models have fewer parameters and an economic story, which is what you want for scenario work and long-horizon analysis.</div></details>
+    </div>
+
+    <div class="panel" id="lm2-p">
+      <div class="q">
+        <div class="stem">1. A two-year, 5% annual-pay bond is valued on a calibrated binomial tree. At the one-year up node the rate is 6% and at the down node 4%. The one-year rate today is 4.5%. The bond's value today is <em>closest</em> to:</div>
+        <ol type="A"><li>100.00</li><li>100.47</li><li>101.30</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> Year-2 cash flow is 105 in both states.
+          \[ V_u=\frac{105}{1.06}=99.057,\qquad V_d=\frac{105}{1.04}=100.962 \]
+          Add the year-1 coupon of 5 to each, average, discount at 4.5%:
+          \[ V_0=\frac{0.5(104.057)+0.5(105.962)}{1.045}=\frac{105.009}{1.045}=100.49 \]
+          About 100.47&ndash;100.49 depending on rounding. <span class="wrong">A</span> assumes the bond must be at par. <span class="wrong">C</span> comes from forgetting to discount the final period.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">2. An analyst values an option-free bond two ways: discounting each cash flow at its spot rate, and backward induction through a correctly calibrated binomial tree. The two values will <em>most likely</em> be:</div>
+        <ol type="A"><li>equal</li><li>different, with the tree value higher</li><li>different, with the tree value lower</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> Calibration forces the tree to reproduce the benchmark curve, so for a security with fixed, path-independent cash flows both methods must return the same arbitrage-free value. A difference would signal a calibration error.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">3. A binomial tree covers four annual periods. The number of distinct interest rate paths is:</div>
+        <ol type="A"><li>4</li><li>8</li><li>16</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> \(2^{n-1}=2^{3}=8\). <span class="wrong">C</span> is \(2^n\), the common slip.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">4. Which security <em>most likely</em> requires Monte Carlo simulation rather than a binomial lattice?</div>
+        <ol type="A"><li>A callable corporate bond</li><li>A mortgage-backed security</li><li>A putable corporate bond</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> MBS cash flows are path dependent: prepayment behaviour depends on the history of rates, including burnout, not just the current rate. A lattice node carries no memory of how it was reached. <span class="wrong">A</span> and <span class="wrong">C</span> are path independent and are handled fine by the lattice.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">5. Which model is an equilibrium term structure model in which the short rate cannot become negative?</div>
+        <ol type="A"><li>Vasicek</li><li>Cox&ndash;Ingersoll&ndash;Ross</li><li>Ho&ndash;Lee</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> CIR's volatility term scales with \(\sqrt{r}\), which collapses to zero as the rate approaches zero. <span class="wrong">A</span> is an equilibrium model but its constant volatility permits negative rates. <span class="wrong">C</span> is arbitrage-free, not equilibrium.</div></details>
+      </div>
+    </div>
+  </section>
+  <section class="module" id="lm3">
+    <div class="mod-head">
+      <h2>LM3 &middot; Valuation and Analysis of Bonds with Embedded Options</h2>
+      <div class="los"><strong>LOS:</strong> (a, b) embedded options and the value relationships; (c, f) valuation on the arbitrage-free tree;
+        (d) volatility effects; (e) level and shape of the curve; (g, h) option-adjusted spread; (i, j) effective duration;
+        (k) one-sided and key rate durations; (l) effective convexity; (m) capped and floored floaters; (n, o) convertibles.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm3-f">Formulas</button>
+      <button class="subtab" data-panel="lm3-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm3-w">Walkthrough</button>
+      <button class="subtab" data-panel="lm3-faq">FAQs</button>
+      <button class="subtab" data-panel="lm3-p">Practice</button>
+    </div>
+
+    <div class="panel active" id="lm3-f">
+      <div class="formula"><div class="fname">The two value identities</div>
+        \[ V_{\text{callable}}=V_{\text{straight}}-V_{\text{call}} \]
+        \[ V_{\text{putable}}=V_{\text{straight}}+V_{\text{put}} \]
+        <div class="fnote">The call belongs to the issuer, so it is subtracted from the investor's value. The put belongs to the investor, so it is added.</div></div>
+      <div class="formula"><div class="fname">Option value backed out of the tree</div>
+        \[ V_{\text{call}}=V_{\text{straight}}-V_{\text{callable}},\qquad V_{\text{put}}=V_{\text{putable}}-V_{\text{straight}} \]</div>
+      <div class="formula"><div class="fname">Node rule with a call</div>
+        \[ V_{\text{node}}=\min\!\left[\text{call price},\ \tfrac{1}{2}\!\left(\tfrac{V_u+C}{1+i}+\tfrac{V_d+C}{1+i}\right)\right] \]
+        <div class="fnote">Putable bonds use \(\max[\text{put price},\ \cdot]\). Apply the rule <em>after</em> discounting, at every node where the option is exercisable.</div></div>
+      <div class="formula"><div class="fname">Option-adjusted spread</div>
+        \[ \text{OAS}= \text{Z-spread}-\text{option cost};\qquad \text{option cost}=\text{Z-spread}-\text{OAS} \]
+        <div class="fnote">OAS is the constant spread added to every rate <em>in the tree</em> that makes the model value equal the market price. It is the compensation for credit and liquidity with the option stripped out, so it is the only spread that compares a callable to an option-free bond fairly.</div></div>
+      <div class="formula"><div class="fname">Effective duration and convexity</div>
+        \[ \text{EffDur}=\frac{PV_{-}-PV_{+}}{2\times PV_{0}\times \Delta \text{curve}} \]
+        \[ \text{EffCon}=\frac{PV_{-}+PV_{+}-2PV_{0}}{PV_{0}\times(\Delta \text{curve})^{2}} \]
+        <div class="fnote">The curve is shifted, the tree is recalibrated, and the bond is revalued. Modified duration is meaningless here because the cash flows change with rates.</div></div>
+      <div class="formula"><div class="fname">One-sided durations</div>
+        \[ \text{Dur}^{-}=\frac{PV_{-}-PV_{0}}{PV_0\,\Delta},\qquad \text{Dur}^{+}=\frac{PV_{0}-PV_{+}}{PV_0\,\Delta} \]
+        <div class="fnote">For a callable trading near its call price, \(\text{Dur}^{+} > \text{Dur}^{-}\): it falls more when rates rise than it rises when rates fall.</div></div>
+      <div class="formula"><div class="fname">Capped and floored floaters</div>
+        \[ V_{\text{capped FRN}}=V_{\text{straight FRN}}-V_{\text{cap}},\qquad V_{\text{floored FRN}}=V_{\text{straight FRN}}+V_{\text{floor}} \]
+        <div class="fnote">The cap is a benefit to the issuer, the floor a benefit to the investor. Same logic as call and put.</div></div>
+      <div class="formula"><div class="fname">Convertible bond building blocks</div>
+        \[ \text{Conversion value}=\text{share price}\times\text{conversion ratio} \]
+        \[ \text{Market conversion price}=\frac{\text{convertible price}}{\text{conversion ratio}} \]
+        \[ \text{Market conversion premium per share}=\text{market conversion price}-\text{share price} \]
+        \[ \text{Premium over straight value}=\frac{\text{convertible price}}{\text{straight value}}-1 \]</div>
+      <div class="formula"><div class="fname">Convertible value, assembled</div>
+        \[ V_{\text{callable convertible}}=V_{\text{straight}}+V_{\text{call option on stock}}-V_{\text{issuer call}}+V_{\text{investor put}} \]</div>
+    </div>
+
+    <div class="panel" id="lm3-q">
+      <div class="subhead">What moves what</div>
+      <table>
+        <tr><th>Change</th><th>Value of call option</th><th>Value of callable bond</th><th>Value of putable bond</th></tr>
+        <tr><td>Interest rate volatility rises</td><td>Up</td><td><span class="tag-bad">Down</span></td><td><span class="tag-good">Up</span></td></tr>
+        <tr><td>Rates fall (parallel)</td><td>Up</td><td>Rises, but compressed near the call price</td><td>Rises like a straight bond</td></tr>
+        <tr><td>Rates rise (parallel)</td><td>Down</td><td>Falls like a straight bond</td><td>Falls, but supported at the put price</td></tr>
+        <tr><td>Curve flattens from a steep upward slope</td><td>Up</td><td>Down</td><td>Up</td></tr>
+      </table>
+      <div class="callout">Both options gain value with volatility. Since the call is subtracted and the put added, higher volatility <em>hurts</em> the callable holder and <em>helps</em> the putable holder. This single line answers a large share of the exam questions in this module.</div>
+
+      <div class="subhead">Duration and convexity comparison</div>
+      <table>
+        <tr><th>Bond</th><th>Effective duration</th><th>Effective convexity</th></tr>
+        <tr><td>Straight</td><td>Baseline</td><td>Always positive</td></tr>
+        <tr><td>Callable</td><td>\(\le\) straight; shrinks as rates fall</td><td>Turns <span class="tag-bad">negative</span> at low rates</td></tr>
+        <tr><td>Putable</td><td>\(\le\) straight; shrinks as rates rise</td><td>Positive, and rises as rates rise</td></tr>
+      </table>
+
+      <div class="subhead">Spreads, ordered</div>
+      <table>
+        <tr><th>Bond type</th><th>Relationship</th></tr>
+        <tr><td>Callable</td><td>OAS &lt; Z-spread (option cost is positive)</td></tr>
+        <tr><td>Putable</td><td>OAS &gt; Z-spread (option cost is negative)</td></tr>
+        <tr><td>Option-free</td><td>OAS = Z-spread</td></tr>
+      </table>
+      <div class="callout"><strong>Volatility and OAS:</strong> raise the assumed volatility and the model says the embedded call is worth more, so the model price of a callable falls; to force the model back to the observed market price, the computed OAS must fall. Higher assumed volatility &rarr; lower OAS for a callable, higher OAS for a putable. Pick the wrong volatility and you will label a bond cheap when it is not.</div>
+    </div>
+
+    <div class="panel" id="lm3-w">
+      <h4>Part 1 &mdash; Who owns the option (LOS a, b)</h4>
+      <p>Start every question by asking who holds the option. The issuer holds the call and will use it when rates fall, refinancing cheaply, which caps the investor's upside. The investor holds the put and will use it when rates rise, putting the bond back at par, which floors the downside. From there the two identities follow directly.</p>
+
+      <h4>Part 2 &mdash; Valuing on the tree (LOS c, f)</h4>
+      <p>Use the same calibrated tree from LM2, with one addition: at every node where the option is live, apply the exercise rule after discounting. Callable takes the minimum of the call price and the computed value; putable takes the maximum of the put price and the computed value. Then carry that value leftward.</p>
+      <p>Get the option value by valuing the bond twice - once ignoring the option, once applying it - and taking the difference. This is faster and less error-prone than trying to value the option directly.</p>
+
+      <h4>Part 3 &mdash; Volatility (LOS d, h)</h4>
+      <p>Higher volatility widens the tree. Wider trees make options more valuable, because an option pays off in the good tail and is protected in the bad one. Callable value falls, putable value rises.</p>
+      <p>The OAS consequence trips people up. OAS is solved for so the model matches the <em>market</em> price, which does not move when you change your assumption. If higher volatility lowers the model value of a callable, less spread is needed to reconcile it, so the computed OAS falls. This is why the volatility assumption has to be defensible before you call a bond cheap or rich.</p>
+
+      <h4>Part 4 &mdash; Curve level and shape (LOS e)</h4>
+      <p>As rates fall, a callable bond's price stops keeping up: it compresses toward the call price. That is price compression, and it is what makes effective duration shrink and effective convexity go negative. A putable bond behaves the other way, supported from below as rates rise.</p>
+      <p>Shape matters too. A flatter curve, all else equal, raises the value of the call option (the issuer's refinancing option becomes more likely to be in the money across the horizon) and so lowers the callable bond's value.</p>
+
+      <h4>Part 5 &mdash; Duration and convexity (LOS i, j, k, l)</h4>
+      <p>Modified duration assumes fixed cash flows, which is false here, so effective duration is the only correct measure: shift the curve, recalibrate the tree, revalue. Both callable and putable durations are lower than the straight bond's, because the option truncates part of the price response.</p>
+      <p>One-sided durations exist because the response is asymmetric. For a callable near its call price, the up-rate duration exceeds the down-rate duration. Key rate durations then show <em>where</em> on the curve the sensitivity sits, which for a callable clusters around the call date rather than maturity.</p>
+
+      <h4>Part 6 &mdash; Capped and floored floaters, and convertibles (LOS m, n, o)</h4>
+      <p>A capped floater is a floater minus a cap; a floored floater is a floater plus a floor. Value them on the tree by applying the cap or floor to the coupon at each node before discounting.</p>
+      <p>A convertible is a straight bond plus a call option on the issuer's stock. Its floor is the higher of the straight value and the conversion value, and it will trade above that floor because the option has time value. Watch the direction of the adjustments: an issuer call reduces the value, an investor put increases it. When the share price is far above the conversion price the convertible tracks the equity; far below, it trades like a straight bond.</p>
+    </div>
+
+    <div class="panel" id="lm3-faq">
+      <details class="faq"><summary>Why is a callable bond's convexity negative at low rates but positive at high rates?</summary>
+        <div class="a">At high rates the call is far out of the money and the bond behaves like a straight bond, which has positive convexity. At low rates the call is live and the price is pinned near the call price, so further rate falls stop producing price gains. That flattening of the price-yield curve is negative convexity.</div></details>
+      <details class="faq"><summary>Is a lower OAS always a worse deal?</summary>
+        <div class="a">Compare OAS to a peer group of similar credit and liquidity. Below the peer group means the bond is expensive; above means cheap. But OAS is model output: it depends on your volatility assumption and your tree. Two analysts with different volatility assumptions get different OAS for the same bond at the same price.</div></details>
+      <details class="faq"><summary>Why not just use Z-spread for a callable bond?</summary>
+        <div class="a">Because the Z-spread includes the compensation the investor demands for having written the call. Comparing a callable's Z-spread to an option-free bond's Z-spread makes the callable look generous when it is really just riskier in a different way. OAS strips the option out so the comparison is like for like.</div></details>
+      <details class="faq"><summary>Does raising volatility change an option-free bond's OAS?</summary>
+        <div class="a">No. With no option there is nothing for volatility to act on, so the tree still reproduces the same value and OAS equals the Z-spread regardless of the volatility input.</div></details>
+      <details class="faq"><summary>A convertible's conversion value is below its straight value. What is it trading on?</summary>
+        <div class="a">The bond floor. It will behave largely like a straight bond, with its price driven by rates and credit rather than the share price, though it still holds some equity option value which is why it trades above the straight value.</div></details>
+    </div>
+
+    <div class="panel" id="lm3-p">
+      <div class="q">
+        <div class="stem">1. A straight bond is valued at 102.50 and an otherwise identical callable bond at 99.75. The value of the embedded call option is <em>closest</em> to:</div>
+        <ol type="A"><li>2.75</li><li>&minus;2.75</li><li>99.75</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> \(V_{\text{call}}=V_{\text{straight}}-V_{\text{callable}}=102.50-99.75=2.75\). The option has positive value; it is subtracted from the investor's bond value, which is a different thing from being negative.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">2. An analyst increases the interest rate volatility assumption from 10% to 20% when valuing a callable bond whose market price is unchanged. The computed OAS will <em>most likely</em>:</div>
+        <ol type="A"><li>increase</li><li>decrease</li><li>be unchanged</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> Higher volatility makes the embedded call more valuable, lowering the model value of the callable bond. Since the market price is fixed, less spread is needed to reconcile model to market, so OAS falls. <span class="wrong">A</span> is the putable answer. <span class="wrong">C</span> is the option-free answer.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">3. A putable bond, a callable bond and an otherwise identical straight bond are compared at a low level of interest rates. The bond with the <em>highest</em> effective duration is <em>most likely</em> the:</div>
+        <ol type="A"><li>callable bond</li><li>putable bond</li><li>straight bond</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">C is correct.</span> Both embedded options truncate the price response, so both option-embedded bonds have effective durations at or below the straight bond's. At low rates the call is live, so the callable's duration is compressed the most. <span class="wrong">A</span> is the lowest, not the highest.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">4. A convertible bond trades at 1,180. Its conversion ratio is 20 and the underlying share trades at 52. The market conversion premium per share is <em>closest</em> to:</div>
+        <ol type="A"><li>7.00</li><li>59.00</li><li>140.00</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> Market conversion price \(=1{,}180/20=59\). Premium per share \(=59-52=7\). <span class="wrong">B</span> is the market conversion price itself. <span class="wrong">C</span> is the total premium across all 20 shares.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">5. A capped floating-rate note is <em>best</em> described as:</div>
+        <ol type="A"><li>a straight floater plus a cap held by the investor</li><li>a straight floater minus a cap held by the issuer</li><li>a straight floater plus a floor held by the issuer</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> The cap protects the issuer from paying above a ceiling, so it has value to the issuer and is subtracted from the investor's value: \(V_{\text{capped}}=V_{\text{straight}}-V_{\text{cap}}\). A floor works the other way and is added.</div></details>
+      </div>
+    </div>
+  </section>
+  <section class="module" id="lm4">
+    <div class="mod-head">
+      <h2>LM4 &middot; Credit Analysis Models</h2>
+      <div class="los"><strong>LOS:</strong> expected exposure, LGD, POD and CVA; credit scores versus credit ratings and their limitations;
+        the credit risk of a bond using its expected exposures and recovery rate; credit spread analysis and term structure;
+        structural versus reduced-form models; credit analysis of securitised debt.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm4-f">Formulas</button>
+      <button class="subtab" data-panel="lm4-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm4-w">Walkthrough</button>
+      <button class="subtab" data-panel="lm4-faq">FAQs</button>
+      <button class="subtab" data-panel="lm4-p">Practice</button>
+    </div>
+
+    <div class="panel active" id="lm4-f">
+      <div class="formula"><div class="fname">The core chain</div>
+        \[ \text{LGD}=\text{Exposure}\times(1-\text{Recovery Rate}) \]
+        \[ \text{Expected loss}=\text{LGD}\times\text{POD} \]
+        \[ \text{CVA}=\sum_{t=1}^{T}\frac{\text{Expected loss}_t}{(1+r_t)^{t}} \]
+        <div class="fnote">CVA is the present value of expected losses over the life of the bond. Discount at the risk-free rate, using each period's own rate.</div></div>
+      <div class="formula"><div class="fname">Fair value of a risky bond</div>
+        \[ V_{\text{risky}}=V_{\text{risk-free}}-\text{CVA} \]
+        <div class="fnote">Value it as if default-free first, then subtract the credit charge. Everything in the module hangs off this line.</div></div>
+      <div class="formula"><div class="fname">Hazard rate and survival</div>
+        \[ \text{POS}_t=(1-\lambda)^{t},\qquad \text{POD}_t=\lambda(1-\lambda)^{t-1} \]
+        <div class="fnote">\(\lambda\) is the conditional (hazard) rate of default in a period given survival to the start of it. The unconditional POD for period \(t\) falls over time even with a constant hazard rate, because survival to reach period \(t\) becomes less likely.</div></div>
+      <div class="formula"><div class="fname">Credit spread, approximated</div>
+        \[ \text{Credit spread}\approx \text{POD}\times\text{LGD rate}=\lambda\times(1-\text{RR}) \]
+        <div class="fnote">A quick sanity check only. It ignores liquidity, taxes and the risk premium investors demand above the pure expected loss.</div></div>
+      <div class="formula"><div class="fname">Structural model, the option view</div>
+        \[ \text{Equity}=\max(0,\ A_T-K),\qquad \text{Debt}=A_T-\max(0,\ A_T-K) \]
+        <div class="fnote">\(A_T\) is asset value at debt maturity, \(K\) the face value. Equity is a call on the firm's assets; owning the risky debt is owning the assets and having written a call, equivalently owning risk-free debt and having written a put with strike \(K\).</div></div>
+      <div class="formula"><div class="fname">Expected exposure</div>
+        \[ EE_t=\sum_{\text{nodes}} p_{\text{node}}\times(\text{bond value}_{\text{node}}+\text{coupon}) \]
+        <div class="fnote">Exposure is what you would lose before recovery, so it is the value of the remaining cash flows at that date, not the face amount.</div></div>
+    </div>
+
+    <div class="panel" id="lm4-q">
+      <div class="subhead">The four terms, in order</div>
+      <table>
+        <tr><th>Term</th><th>Meaning</th><th>Watch for</th></tr>
+        <tr><td>Expected exposure</td><td>Value at risk at a date, before recovery</td><td>It is a value, not par; it changes with rates and time</td></tr>
+        <tr><td>Recovery rate</td><td>Percentage recovered given default</td><td>Applied to exposure, not to face</td></tr>
+        <tr><td>LGD</td><td>Exposure &times; (1 &minus; RR)</td><td>An amount, while "LGD rate" is a percentage</td></tr>
+        <tr><td>POD</td><td>Probability of default in a period</td><td>Unconditional POD versus the conditional hazard rate</td></tr>
+      </table>
+
+      <div class="subhead">Structural versus reduced-form</div>
+      <table>
+        <tr><th></th><th>Structural</th><th>Reduced-form</th></tr>
+        <tr><td>Default is</td><td>Endogenous: assets fall below debt</td><td>Exogenous: a statistical jump process</td></tr>
+        <tr><td>Inputs</td><td>Asset value, asset volatility, debt face and maturity</td><td>Observable data: financials, macro variables, spreads</td></tr>
+        <tr><td>Strength</td><td>Economic intuition, an explicit option analogy</td><td>Uses observable inputs; allows POD to vary with the cycle</td></tr>
+        <tr><td>Weakness</td><td>Asset value and volatility are not observable; simple capital structure assumed</td><td>No economic story for default; assumes the past predicts the future; hazard rate estimation is backward looking</td></tr>
+      </table>
+
+      <div class="subhead">Credit scores versus credit ratings</div>
+      <div class="callout">Credit <strong>scores</strong> apply to individuals and small businesses and are ordinal - a higher score is better, but the gap between 700 and 750 has no fixed meaning. Credit <strong>ratings</strong> apply to companies and their debt issues, and are also ordinal. Shared limitations: they are stable by design so they lag the market, they do not adjust for the business cycle, they say nothing about price (a highly rated bond can still be a bad buy), and event risk such as an LBO or a lawsuit is largely unpredictable.</div>
+
+      <div class="subhead">Credit spread term structure, typical shapes</div>
+      <table>
+        <tr><th>Issuer condition</th><th>Spread curve</th><th>Why</th></tr>
+        <tr><td>Investment grade, stable</td><td>Upward sloping</td><td>Little near-term default risk; uncertainty accumulates with time</td></tr>
+        <tr><td>High yield, distressed</td><td>Downward sloping (inverted)</td><td>If it survives the next year or two it is probably out of trouble; near-term risk dominates</td></tr>
+        <tr><td>Expansion</td><td>Flatter, narrower</td><td>Default risk low across the board</td></tr>
+        <tr><td>Recession</td><td>Steeper, wider</td><td>Risk repriced everywhere, most sharply in lower ratings</td></tr>
+      </table>
+    </div>
+
+    <div class="panel" id="lm4-w">
+      <h4>Part 1 &mdash; Build the credit charge one step at a time</h4>
+      <p>Every credit valuation question is the same four steps. Compute the expected exposure at each date. Apply the recovery rate to get LGD. Multiply by that period's probability of default to get expected loss. Discount all the expected losses back and sum them: that is CVA. Subtract CVA from the risk-free value to get the fair value of the risky bond.</p>
+      <p>The most common error is using par as the exposure. Exposure is the value of what you still have coming: the remaining coupons and principal, valued at that date. Early in the life of a long bond that can be well above or below par.</p>
+
+      <h4>Part 2 &mdash; Hazard rates and why POD declines</h4>
+      <p>The hazard rate \(\lambda\) is conditional: the chance of defaulting in this period <em>given</em> you made it to the start of it. The unconditional probability of defaulting in period \(t\) is \(\lambda(1-\lambda)^{t-1}\), which falls as \(t\) rises even though \(\lambda\) is constant, because you must survive to get there. Cumulative default probability, by contrast, rises with time. Questions often test whether you can keep those two straight.</p>
+
+      <h4>Part 3 &mdash; The credit spread and what it really pays for</h4>
+      <p>To a first approximation the spread compensates for expected loss, \(\lambda\times(1-\text{RR})\). In practice observed spreads are wider than expected loss alone, because investors also demand payment for liquidity, for the uncertainty in the loss estimate, and for the fact that defaults cluster in bad states of the world when losses hurt most.</p>
+      <p>The spread also moves with things that have nothing to do with the issuer: a market-wide flight to quality widens spreads across every name at once.</p>
+
+      <h4>Part 4 &mdash; Structural models</h4>
+      <p>The insight is that equity is a call option on the firm's assets with strike equal to the debt's face value. Shareholders have limited liability, so if assets are worth less than the debt at maturity they walk away and the debtholders take the assets. This means risky debt equals a risk-free bond plus a short put on the assets, and option pricing machinery then gives a probability of default and a credit spread.</p>
+      <p>The catch is practical: asset value and asset volatility are not directly observable and must be inferred from equity prices, and the model assumes a single zero-coupon debt issue, which no real firm has.</p>
+
+      <h4>Part 5 &mdash; Reduced-form models</h4>
+      <p>These skip the economic story and estimate default statistically. Default arrives as a jump process with a hazard rate estimated from observable variables, which can include the state of the economy, so the model can let default probability rise in a recession. Everything it uses is observable, which is the main advantage. The main criticism is that it presumes the historical relationships continue to hold, and it offers no explanation of <em>why</em> a firm defaults.</p>
+
+      <h4>Part 6 &mdash; Securitised debt</h4>
+      <p>Analysing a securitisation is a different exercise from analysing a corporate. Look at the collateral pool's composition, granularity and homogeneity; a granular, homogeneous pool of many small similar loans can be analysed statistically, while a concentrated pool of a few large exposures needs loan-by-loan work. Then look at the structure: tranching, subordination, overcollateralisation, excess spread and the servicer's quality and incentives. Finally, the sponsor: a securitisation is only as good as the origination standards behind it, and a weak sponsor with no skin in the game is a warning sign regardless of the tranche's rating.</p>
+    </div>
+
+    <div class="panel" id="lm4-faq">
+      <details class="faq"><summary>Why does the unconditional probability of default fall over time if the hazard rate is constant?</summary>
+        <div class="a">Because to default in period 5 the issuer must first survive periods 1 through 4. That survival requirement gets harder to satisfy, so \(\lambda(1-\lambda)^{t-1}\) shrinks. Cumulative default probability still rises; only the per-period unconditional probability falls.</div></details>
+      <details class="faq"><summary>Should exposure ever be higher than par?</summary>
+        <div class="a">Yes. If rates have fallen or the bond carries a high coupon, the remaining cash flows are worth more than par, so exposure exceeds par. Exposure is a market value of what remains, not a face amount.</div></details>
+      <details class="faq"><summary>If ratings are so limited, why does anyone use them?</summary>
+        <div class="a">They are a cheap, comparable, widely understood ordinal ranking of default risk, they change slowly which is useful for mandates and covenants, and they map to a large body of historical default data. The limitations are about what they do not do: they do not price the bond, they do not adjust for the cycle, and they cannot see event risk.</div></details>
+      <details class="faq"><summary>Which model would you use in practice?</summary>
+        <div class="a">Reduced-form models dominate practical credit risk work because their inputs are observable and they handle the credit cycle. Structural models are the better teaching device and are still used where a firm's asset value can be estimated reasonably, notably in commercial credit models built off equity market data.</div></details>
+      <details class="faq"><summary>Why is a high-yield issuer's credit spread curve often downward sloping?</summary>
+        <div class="a">Its problems are immediate. The market prices a high chance of default in the next year or two; conditional on surviving that, the firm has probably refinanced or recovered, so longer-dated risk per year is lower. That inverts the curve.</div></details>
+    </div>
+
+    <div class="panel" id="lm4-p">
+      <div class="q">
+        <div class="stem">1. A bond has an expected exposure of 104.00 at a given date and a recovery rate of 40%. The probability of default in that period is 1.5%. Expected loss for that period is <em>closest</em> to:</div>
+        <ol type="A"><li>0.62</li><li>0.94</li><li>1.56</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> \( \text{LGD}=104\times(1-0.40)=62.40\); \( \text{EL}=62.40\times0.015=0.936\). <span class="wrong">A</span> uses the recovery rate as the loss rate the wrong way round in a different combination; <span class="wrong">C</span> forgets recovery entirely (\(104\times0.015\)).</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">2. A five-year bond's risk-free value is 98.75 and its CVA is 2.10. Its fair value is <em>closest</em> to:</div>
+        <ol type="A"><li>96.65</li><li>98.75</li><li>100.85</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> \(V_{\text{risky}}=98.75-2.10=96.65\). CVA is the present value of expected credit losses and is always subtracted.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">3. The hazard rate for an issuer is a constant 2% per year. The probability that the issuer defaults during year 3 is <em>closest</em> to:</div>
+        <ol type="A"><li>1.92%</li><li>2.00%</li><li>5.88%</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> \( \text{POD}_3=0.02\times(0.98)^{2}=0.0192\). <span class="wrong">B</span> is the conditional hazard rate, not the unconditional probability. <span class="wrong">C</span> is roughly the cumulative three-year probability.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">4. Which statement <em>best</em> describes a limitation specific to structural credit models?</div>
+        <ol type="A"><li>They assume default probabilities are constant over the credit cycle</li><li>They require estimates of asset value and asset volatility, which are not directly observable</li><li>They provide no economic explanation for why default occurs</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> The unobservability of firm asset value and its volatility is the classic structural-model criticism. <span class="wrong">C</span> is the reduced-form criticism: it is precisely the structural model that <em>does</em> supply the economic story.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">5. An analyst is evaluating a securitisation backed by a granular, homogeneous pool of consumer loans. Compared with a concentrated pool of a few large commercial loans, this pool is <em>most likely</em> to:</div>
+        <ol type="A"><li>require loan-by-loan analysis</li><li>be suited to a statistical, portfolio-level approach</li><li>carry no need to assess the servicer</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> Granularity and homogeneity are exactly the conditions under which pool-level statistical analysis works. <span class="wrong">A</span> describes the concentrated commercial pool. <span class="wrong">C</span> is wrong in every securitisation: servicer quality and incentives matter regardless of pool composition.</div></details>
+      </div>
+    </div>
+  </section>
+  <section class="module" id="lm5">
+    <div class="mod-head">
+      <h2>LM5 &middot; Credit Default Swaps</h2>
+      <div class="los"><strong>LOS:</strong> (a) CDS basics, single-name and index, and the defining parameters; (b) credit events and settlement;
+        (c) pricing principles and the factors that drive them; (d) managing credit exposure and expressing curve views;
+        (e) using CDS to exploit valuation disparities across markets.</div>
+    </div>
+    <div class="subtabs">
+      <button class="subtab active" data-panel="lm5-f">Formulas</button>
+      <button class="subtab" data-panel="lm5-q">Quick Reference</button>
+      <button class="subtab walk" data-panel="lm5-w">Walkthrough</button>
+      <button class="subtab" data-panel="lm5-faq">FAQs</button>
+      <button class="subtab" data-panel="lm5-p">Practice</button>
+    </div>
+
+    <div class="panel active" id="lm5-f">
+      <div class="formula"><div class="fname">Payout on a credit event</div>
+        \[ \text{Payout ratio}=1-\text{Recovery rate},\qquad \text{Payout}=\text{Notional}\times(1-\text{RR}) \]</div>
+      <div class="formula"><div class="fname">Upfront premium</div>
+        \[ \text{Upfront premium}\approx(\text{CDS spread}-\text{CDS coupon})\times\text{EffSpreadDur}\times\text{Notional} \]
+        <div class="fnote">Standardised coupons are 1% for investment grade and 5% for high yield, so the difference between the market spread and the fixed coupon is settled up front.</div></div>
+      <div class="formula"><div class="fname">Price of the CDS per 100 notional</div>
+        \[ \text{Price}\approx 100-\text{Upfront premium \%} \]
+        <div class="fnote">Quoted like a bond price. Spread above coupon means the protection buyer pays up front, so the price is below 100.</div></div>
+      <div class="formula"><div class="fname">Profit on unwinding at a new spread</div>
+        \[ \%\ \Delta\text{Profit}\approx \Delta\text{Spread (bps)}\times\text{EffSpreadDur}\times\text{Notional} \]
+        <div class="fnote">Widening spreads profit the protection buyer. The sign convention costs marks: buyer of protection is short credit.</div></div>
+      <div class="formula"><div class="fname">Basis trade</div>
+        \[ \text{Basis}=\text{CDS spread}-\text{bond spread (Z-spread)} \]
+        <div class="fnote">Negative basis means the CDS is cheap relative to the bond: buy the bond and buy protection to capture the difference. Positive basis is the reverse.</div></div>
+      <div class="formula"><div class="fname">Curve trade</div>
+        <div class="fnote">Expecting the credit curve to steepen: buy long-dated protection, sell short-dated protection. Expecting flattening: the reverse. The trade is a view on the <em>shape</em>, largely neutral to a parallel move in the level.</div></div>
+    </div>
+
+    <div class="panel" id="lm5-q">
+      <div class="subhead">Product parameters</div>
+      <table>
+        <tr><th>Parameter</th><th>Typical</th></tr>
+        <tr><td>Reference entity / obligation</td><td>The issuer, and the specific deliverable debt</td></tr>
+        <tr><td>Notional</td><td>Face amount of protection</td></tr>
+        <tr><td>Standard coupon</td><td>1% investment grade, 5% high yield, paid quarterly</td></tr>
+        <tr><td>Tenor</td><td>Five years is the most liquid point</td></tr>
+        <tr><td>Index products</td><td>CDX in North America, iTraxx in Europe and Asia; equally weighted baskets, rolled every six months</td></tr>
+      </table>
+
+      <div class="subhead">Credit events and settlement</div>
+      <table>
+        <tr><th>Credit event</th><th>Note</th></tr>
+        <tr><td>Bankruptcy</td><td>Court-supervised protection from creditors</td></tr>
+        <tr><td>Failure to pay</td><td>Missed payment without a bankruptcy filing</td></tr>
+        <tr><td>Restructuring</td><td>Coupon or principal reduced, deferred or subordinated; not a credit event in standard North American high-yield contracts</td></tr>
+      </table>
+      <div class="callout">A Determinations Committee of ISDA members rules on whether a credit event occurred and whether an auction is held. <strong>Physical settlement</strong> delivers the bond for par. <strong>Cash settlement</strong>, now the norm, pays notional &times; (1 &minus; recovery rate), with the recovery rate set by an auction of the cheapest-to-deliver obligation.</div>
+
+      <div class="subhead">Who is long what</div>
+      <table>
+        <tr><th>Position</th><th>Credit view</th><th>Profits when</th></tr>
+        <tr><td>Buy protection</td><td>Bearish; short credit</td><td>Spreads widen, credit deteriorates</td></tr>
+        <tr><td>Sell protection</td><td>Bullish; long credit, similar to owning the bond</td><td>Spreads narrow, no default</td></tr>
+      </table>
+
+      <div class="subhead">What drives the spread</div>
+      <div class="callout">Two things, and only two, in the pricing framework: the probability of default and the expected recovery rate. Everything else - leverage, earnings volatility, the cycle, subordination - works through one of those. A higher hazard rate or a lower recovery rate means a wider spread.</div>
+    </div>
+
+    <div class="panel" id="lm5-w">
+      <h4>Part 1 &mdash; What a CDS actually is (LOS a)</h4>
+      <p>Insurance on a bond, structured as a swap. The protection buyer pays a fixed quarterly coupon on the notional and receives a payment if a credit event occurs. Contracts are standardised: fixed coupons of 1% or 5%, so the economic difference between the fair market spread and that fixed coupon is settled in a single upfront payment.</p>
+      <p>Single-name CDS reference one issuer. Index CDS (CDX, iTraxx) reference an equally weighted basket, are more liquid, and let you take a view on a whole credit segment. If a constituent defaults, it is removed from the index and settled individually; the index continues with the survivors at reduced notional.</p>
+
+      <h4>Part 2 &mdash; Events and settlement (LOS b)</h4>
+      <p>Three credit events: bankruptcy, failure to pay, restructuring. Note the regional split - restructuring is generally excluded from standard North American high-yield contracts and included in European contracts. ISDA's Determinations Committee decides whether an event occurred, which removes most of the litigation risk that plagued early contracts.</p>
+      <p>Cash settlement is now standard, using an auction to establish the recovery rate on the cheapest-to-deliver obligation. That "cheapest to deliver" wording matters: the payout is set by the cheapest qualifying bond, not by the one you happen to own.</p>
+
+      <h4>Part 3 &mdash; Pricing (LOS c)</h4>
+      <p>The spread compensates the protection seller for expected loss, so it rises with the hazard rate and falls with the expected recovery rate. In practice you quote the spread and convert to an upfront payment: if the market spread exceeds the fixed coupon the buyer pays up front, and if it is below the coupon the seller pays. The conversion uses the effective spread duration of the contract.</p>
+      <p>Mark to market: once the trade is on, a change in spreads produces gains or losses roughly equal to the spread change times the spread duration times the notional. The protection buyer gains when spreads widen.</p>
+
+      <h4>Part 4 &mdash; Managing exposure and curve views (LOS d)</h4>
+      <p>The direct use is hedging: a lender holding a loan buys protection to shed the credit risk without selling the asset, which preserves the client relationship. The synthetic use is the reverse: selling protection creates long credit exposure with no funding, useful when the cash bond is unavailable or expensive to buy.</p>
+      <p>Curve trades express a view on shape rather than level. If you expect the credit curve to steepen - short-term risk improving relative to long-term - buy long-dated protection and sell short-dated. Because the two legs offset on a parallel move, the position is largely a bet on the shape alone.</p>
+
+      <h4>Part 5 &mdash; Valuation disparities (LOS e)</h4>
+      <p>The basis trade is the classic. Same issuer, same maturity, two prices for the same credit risk: the bond's Z-spread and the CDS spread. When the basis is negative (CDS spread below bond spread) the protection is cheap, so buy the bond and buy protection and lock the difference. Positive basis reverses the trade.</p>
+      <p>The same logic extends across the capital structure and across markets: CDS against equity or equity options in a capital-structure arbitrage, or index CDS against the sum of its constituents when the index trades away from the intrinsic basket. All of these depend on the mispricing closing, and the risk is that it widens first.</p>
+    </div>
+
+    <div class="panel" id="lm5-faq">
+      <details class="faq"><summary>Is buying protection the same as shorting the bond?</summary>
+        <div class="a">Economically similar, practically much easier. Shorting a corporate bond requires borrowing it, which is often impossible or expensive. A CDS gives the same directional credit exposure with a standardised contract, no bond borrow, and a known maximum cost - the coupon stream.</div></details>
+      <details class="faq"><summary>Why are contracts standardised at 1% and 5% coupons instead of just paying the market spread?</summary>
+        <div class="a">Standard coupons make contracts fungible, which lets positions be netted and unwound easily and supports central clearing. The spread-versus-coupon difference is handled by the upfront payment, so the economics are unchanged.</div></details>
+      <details class="faq"><summary>What does "cheapest to deliver" mean for the payout?</summary>
+        <div class="a">Several bonds can qualify as deliverable obligations. Since a rational protection buyer would deliver the cheapest one, the auction recovery rate is set by that bond, which makes the payout larger than it would be if the recovery on a higher-priced obligation were used. It is a real effect on expected payout, not a technicality.</div></details>
+      <details class="faq"><summary>If a name in a CDX index defaults, what happens to the index contract?</summary>
+        <div class="a">That name is settled separately, and the index continues with the remaining constituents at a proportionally reduced notional. The index does not terminate.</div></details>
+      <details class="faq"><summary>Why would a negative basis persist if it is free money?</summary>
+        <div class="a">It is not free. The trade requires funding the bond position, carries counterparty risk on the CDS, may face mark-to-market losses if the basis widens further, and can be constrained by balance-sheet limits. Basis trades blew up in 2008 for exactly these reasons.</div></details>
+    </div>
+
+    <div class="panel" id="lm5-p">
+      <div class="q">
+        <div class="stem">1. A protection buyer holds a $10 million notional CDS. A credit event occurs and the auction sets the recovery rate at 35%. The payout to the protection buyer is <em>closest</em> to:</div>
+        <ol type="A"><li>$3.5 million</li><li>$6.5 million</li><li>$10.0 million</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> \(10\text{m}\times(1-0.35)=6.5\text{m}\). <span class="wrong">A</span> uses the recovery rate itself as the payout ratio.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">2. An investment-grade CDS has a standard coupon of 1% and a market spread of 1.65%. The effective spread duration is 4.2. The upfront premium as a percentage of notional is <em>closest</em> to, and paid by:</div>
+        <ol type="A"><li>2.73%, paid by the protection buyer</li><li>2.73%, paid by the protection seller</li><li>6.93%, paid by the protection buyer</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> \((1.65\%-1.00\%)\times4.2=2.73\%\). Because the market spread exceeds the fixed coupon, the coupon alone under-compensates the seller, so the <em>buyer</em> pays the difference up front. <span class="wrong">C</span> multiplies the full spread rather than the difference.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">3. An analyst expects an issuer's near-term prospects to improve while its long-term outlook deteriorates. The <em>most</em> appropriate CDS curve trade is to:</div>
+        <ol type="A"><li>buy short-term protection and sell long-term protection</li><li>sell short-term protection and buy long-term protection</li><li>buy protection at all maturities</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">B is correct.</span> That view is a steepening credit curve. Selling short-dated protection profits from near-term improvement, buying long-dated protection profits from long-term deterioration. <span class="wrong">A</span> is the flattener. <span class="wrong">C</span> is a view on the level, not the shape.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">4. A five-year corporate bond trades at a Z-spread of 240 bps while the five-year CDS on the same issuer trades at 195 bps. The trade that <em>most likely</em> captures this disparity is to:</div>
+        <ol type="A"><li>buy the bond and buy CDS protection</li><li>short the bond and sell CDS protection</li><li>buy the bond and sell CDS protection</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">A is correct.</span> The basis is \(195-240=-45\) bps, so protection is cheap relative to the bond. Buy the bond for 240 bps, pay 195 bps for protection, and keep roughly 45 bps with the credit risk largely hedged. <span class="wrong">C</span> doubles the credit exposure instead of hedging it.</div></details>
+      </div>
+      <div class="q">
+        <div class="stem">5. Which of the following is <em>least likely</em> to be a credit event under a standard North American high-yield CDS contract?</div>
+        <ol type="A"><li>Bankruptcy</li><li>Failure to pay</li><li>Restructuring</li></ol>
+        <details><summary>Answer</summary>
+          <div class="ans"><span class="right">C is correct.</span> Restructuring is generally excluded from standard North American high-yield contracts, though it is included in European contracts. Bankruptcy and failure to pay are credit events everywhere.</div></details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  CFA Level II Review &middot; Fixed Income LM1&ndash;LM5 &middot; Same tabbed layout as the Quantitative Methods page.
+  Derived study material only. Formulas rendered with MathJax (needs internet on first load).
+</footer>
+
+<script>
+  document.querySelectorAll('.modtab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.modtab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.mod).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+  document.querySelectorAll('.subtab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var group = btn.closest('.module');
+      group.querySelectorAll('.subtab').forEach(b=>b.classList.remove('active'));
+      group.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
