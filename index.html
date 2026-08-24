@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CFA Level I Study Tracker & Sprint Dashboard</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP HEADER & COUNTDOWN NAVBAR -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <i data-lucide="award" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            CFA Level I
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Candidate Tracker</span>
+          </h1>
+          <p class="text-xs text-slate-400">Mastery Hub • 24-Day Sprint • EOCQ Practice</p>
+        </div>
+      </div>
+
+      <!-- Live Exam Countdown -->
+      <div class="flex items-center space-x-2 bg-slate-950/80 px-4 py-2 rounded-xl border border-slate-800 shadow-inner">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">Exam Day:</span>
+        <div class="flex items-center space-x-1.5 font-mono text-center">
+          <div class="flex flex-col items-center">
+            <span id="cd-days" class="text-base font-black text-indigo-400 leading-none">00</span>
+            <span class="text-[9px] text-slate-500 uppercase">Days</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex flex-col items-center">
+            <span id="cd-hours" class="text-base font-black text-indigo-300 leading-none">00</span>
+            <span class="text-[9px] text-slate-500 uppercase">Hrs</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex flex-col items-center">
+            <span id="cd-mins" class="text-base font-black text-slate-300 leading-none">00</span>
+            <span class="text-[9px] text-slate-500 uppercase">Min</span>
+          </div>
+          <span class="text-slate-600 font-bold">:</span>
+          <div class="flex flex-col items-center">
+            <span id="cd-secs" class="text-base font-black text-slate-400 leading-none">00</span>
+            <span class="text-[9px] text-slate-500 uppercase">Sec</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Utilities -->
+      <div class="flex items-center space-x-2">
+        <button onclick="app.exportData('json')" class="px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 flex items-center space-x-1.5 transition" title="Export Backup">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Backup</span>
+        </button>
+        <button id="theme-toggle-btn" class="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition" title="Toggle Theme">
+          <i data-lucide="sun-medium" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Sub Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto border-t border-slate-800/80 py-1.5 text-sm font-medium">
+      <button class="nav-btn px-4 py-2 rounded-lg bg-indigo-600 text-white shadow-md flex items-center space-x-2 transition whitespace-nowrap" data-tab="dashboard">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="curriculum">
+        <i data-lucide="book-marked" class="w-4 h-4"></i>
+        <span>Curriculum (103 Modules)</span>
+      </button>
+      <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="sprint">
+        <i data-lucide="flame" class="w-4 h-4"></i>
+        <span>24-Day Sprint & Rules</span>
+      </button>
+      <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="review">
+        <i data-lucide="file-check" class="w-4 h-4"></i>
+        <span>High-Yield Review & Traps</span>
+      </button>
+      <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="timer">
+        <i data-lucide="clock" class="w-4 h-4"></i>
+        <span>Study Log & Timer</span>
+      </button>
+      <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="settings">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+        <span>Settings & Data</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <div id="tab-dashboard" class="tab-pane space-y-6">
+      
+      <!-- Top Metrics Overview -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase">
+            <span>Overall Progress</span>
+            <i data-lucide="pie-chart" class="w-4 h-4 text-indigo-400"></i>
+          </div>
+          <div class="text-2xl font-extrabold text-white mt-2" id="stat-progress-pct">0%</div>
+          <div class="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div id="dashboard-progress-bar" class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase">
+            <span>Completed Modules</span>
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+          </div>
+          <div class="text-2xl font-extrabold text-emerald-400 mt-2">
+            <span id="stat-completed-modules">0</span> <span class="text-sm font-normal text-slate-400">/ <span id="stat-total-modules">103</span></span>
+          </div>
+          <div class="text-xs text-slate-500 mt-2">Core Learning Modules</div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase">
+            <span>Sprint Execution</span>
+            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+          </div>
+          <div class="text-2xl font-extrabold text-amber-400 mt-2" id="stat-sprint-pct">0%</div>
+          <div class="text-xs text-slate-500 mt-2">24-Day Schedule Tasks</div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase">
+            <span>Hours Logged</span>
+            <i data-lucide="hourglass" class="w-4 h-4 text-sky-400"></i>
+          </div>
+          <div class="text-2xl font-extrabold text-sky-400 mt-2" id="stat-total-hours">0.0h</div>
+          <div class="text-xs text-slate-500 mt-2">Target: 300+ Hours</div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow col-span-2 sm:col-span-2 lg:col-span-1">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase">
+            <span>EOCQ Method</span>
+            <i data-lucide="target" class="w-4 h-4 text-pink-400"></i>
+          </div>
+          <div class="text-sm font-bold text-slate-200 mt-2">Active Strategy</div>
+          <div class="text-xs text-indigo-400 mt-1 cursor-pointer hover:underline" onclick="app.switchTab('sprint')">Read 5 Golden Rules &rarr;</div>
+        </div>
+
+      </div>
+
+      <!-- Action Banner for Today's Sprint -->
+      <div id="today-sprint-banner"></div>
+
+      <!-- Topic Progress Chart & Weight Comparison -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Bar Chart -->
+        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white">Topic Completion vs. CFA Weight</h3>
+              <p class="text-xs text-slate-400">Track syllabus completion per subject area</p>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-medium">10 Topic Areas</span>
+          </div>
+          <div class="h-64 relative">
+            <canvas id="topicProgressChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Strategy Quick Checklist -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-white mb-1 flex items-center">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 mr-2"></i>
+              Heavyweight Priorities
+            </h3>
+            <p class="text-xs text-slate-400 mb-4">Focus 60%+ effort on the highest-weight topics:</p>
+            
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+                <span class="font-medium text-slate-200">Ethical & Professional Standards</span>
+                <span class="text-indigo-400 font-bold">15–20% Weight</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+                <span class="font-medium text-slate-200">Financial Statement Analysis</span>
+                <span class="text-amber-400 font-bold">13–17% Weight</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+                <span class="font-medium text-slate-200">Fixed Income</span>
+                <span class="text-teal-400 font-bold">12–14% Weight</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+                <span class="font-medium text-slate-200">Equity Investments</span>
+                <span class="text-pink-400 font-bold">10–12% Weight</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4 mt-4 border-t border-slate-800">
+            <button onclick="app.switchTab('curriculum')" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-1">
+              <span>Go to Learning Modules</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Topic Grid Cards -->
+      <div>
+        <h3 class="text-base font-bold text-white mb-3">All Topics Breakdown</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="topic-cards-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 2: MASTER CURRICULUM ================= -->
+    <div id="tab-curriculum" class="tab-pane hidden space-y-4">
+      
+      <!-- Filters and Search Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Search -->
+        <div class="relative flex-1 min-w-[220px]">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+          <input type="text" id="search-modules" placeholder="Search module name or topic..." class="w-full pl-9 pr-4 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <!-- Topic Filter -->
+        <div class="w-full sm:w-auto">
+          <select id="filter-topic" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="all">All 10 Topics</option>
+            <option value="Ethical and Professional Standards">Ethical & Professional Standards (15-20%)</option>
+            <option value="Quantitative Methods">Quantitative Methods (8-12%)</option>
+            <option value="Economics">Economics (8-12%)</option>
+            <option value="Financial Statement Analysis">Financial Statement Analysis (13-17%)</option>
+            <option value="Corporate Issuers">Corporate Issuers (8-12%)</option>
+            <option value="Equity Investments">Equity Investments (10-12%)</option>
+            <option value="Fixed Income">Fixed Income (12-14%)</option>
+            <option value="Derivatives">Derivatives (5-8%)</option>
+            <option value="Alternative Investments">Alternative Investments (5-8%)</option>
+            <option value="Portfolio Management">Portfolio Management (5-8%)</option>
+            <option value="Review">Review & Mock Exams</option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="w-full sm:w-auto">
+          <select id="filter-status" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="all">All Statuses</option>
+            <option value="Complete">Complete Only</option>
+            <option value="In Progress">In Progress Only</option>
+            <option value="Not Started">Not Started Only</option>
+          </select>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="flex items-center space-x-2">
+          <button onclick="app.setAllFilteredStatus('Complete')" class="px-3 py-2 text-xs font-semibold text-emerald-300 bg-emerald-950/50 hover:bg-emerald-900/50 border border-emerald-500/30 rounded-lg transition" title="Mark filtered as Complete">
+            Mark Filtered Complete
+          </button>
+          <button onclick="app.exportData('csv')" class="px-3 py-2 text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg transition" title="Export CSV">
+            Export CSV
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Module Count & Legend -->
+      <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+        <span id="filtered-module-count">103 Modules</span>
+        <span>Click on any status pill to toggle: <strong>Not Started &rarr; In Progress &rarr; Complete</strong></span>
+      </div>
+
+      <!-- Modules Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/60 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <th class="py-3 px-4">Topic</th>
+                <th class="py-3 px-4">Learning Module (LM)</th>
+                <th class="py-3 px-4">Start Date</th>
+                <th class="py-3 px-4">End Date</th>
+                <th class="py-3 px-4">Progress Status</th>
+                <th class="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="curriculum-tbody" class="divide-y divide-slate-800/60 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 3: 24-DAY SPRINT ================= -->
+    <div id="tab-sprint" class="tab-pane hidden space-y-6">
+      
+      <!-- Sprint Banner & Golden Rules -->
+      <div class="bg-gradient-to-br from-indigo-950/80 via-slate-900 to-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h2 class="text-xl font-black text-white flex items-center">
+              <i data-lucide="flame" class="w-5 h-5 mr-2 text-orange-500"></i>
+              The 24-Day EOCQ-First Sprint Strategy
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">High-yield execution plan built for candidate mastery</p>
+          </div>
+          <span class="px-3 py-1 bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 rounded-full text-xs font-bold">
+            25 SPRINT DAYS
+          </span>
+        </div>
+
+        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center">
+            <i data-lucide="zap" class="w-3.5 h-3.5 mr-1"></i>
+            The 5 Golden Sprint Rules
+          </h4>
+          <ul id="sprint-rules-list" class="space-y-2"></ul>
+        </div>
+      </div>
+
+      <!-- Sprint Days List -->
+      <div class="space-y-4" id="sprint-container"></div>
+
+    </div>
+
+    <!-- ================= TAB 4: HIGH-YIELD REVIEW GUIDE ================= -->
+    <div id="tab-review" class="tab-pane hidden space-y-4">
+      
+      <!-- Header with Search -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center">
+            <i data-lucide="book-open-check" class="w-5 h-5 mr-2 text-sky-400"></i>
+            CFA Level I Deep Mastery Guide & Traps
+          </h2>
+          <p class="text-xs text-slate-400">Edge cases, critical exam traps, formulas, and missed concept checklists</p>
+        </div>
+
+        <div class="relative w-full sm:w-72">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-400"></i>
+          <input type="text" id="search-review" placeholder="Search concepts or formulas..." class="w-full pl-9 pr-4 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+        </div>
+      </div>
+
+      <!-- Formatted Review Content -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow review-content max-w-none text-slate-200">
+        <div id="review-content-body"></div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 5: STUDY LOG & TIMER ================= -->
+    <div id="tab-timer" class="tab-pane hidden space-y-6">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Built-in Study Timer & Pomodoro -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow flex flex-col items-center justify-center text-center">
+          <div class="flex items-center space-x-2 mb-4">
+            <button onclick="app.setTimerMode('pomodoro', 25)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300">Pomodoro (25m)</button>
+            <button onclick="app.setTimerMode('shortBreak', 5)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300">Break (5m)</button>
+            <button onclick="app.setTimerMode('pomodoro', 50)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-300">Sprint (50m)</button>
+          </div>
+
+          <div class="text-6xl font-mono font-black text-indigo-400 my-6 tracking-tight" id="timer-display">
+            25:00
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <button id="timer-start-btn" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition flex items-center">
+              <i data-lucide="play" class="w-4 h-4 mr-1"></i> Start
+            </button>
+            <button id="timer-reset-btn" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl border border-slate-700 transition flex items-center">
+              <i data-lucide="rotate-ccw" class="w-4 h-4 mr-1"></i> Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Log a Session Form -->
+        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow">
+          <h3 class="text-base font-bold text-white mb-4 flex items-center">
+            <i data-lucide="plus-circle" class="w-4 h-4 mr-2 text-indigo-400"></i>
+            Log Study Session
+          </h3>
+
+          <form id="study-log-form" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Topic / Subject</label>
+                <select id="log-topic" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+                  <option value="Ethical and Professional Standards">Ethical & Professional Standards</option>
+                  <option value="Quantitative Methods">Quantitative Methods</option>
+                  <option value="Economics">Economics</option>
+                  <option value="Financial Statement Analysis">Financial Statement Analysis</option>
+                  <option value="Corporate Issuers">Corporate Issuers</option>
+                  <option value="Equity Investments">Equity Investments</option>
+                  <option value="Fixed Income">Fixed Income</option>
+                  <option value="Derivatives">Derivatives</option>
+                  <option value="Alternative Investments">Alternative Investments</option>
+                  <option value="Portfolio Management">Portfolio Management</option>
+                  <option value="Mock Exam / Review">Mock Exam / Comprehensive Review</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Duration (Minutes)</label>
+                <input type="number" id="log-minutes" value="45" min="1" max="600" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Questions Attempted</label>
+                <input type="number" id="log-q-attempted" value="20" min="0" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Questions Correct</label>
+                <input type="number" id="log-q-correct" value="16" min="0" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Notes / Key Takeaways</label>
+              <input type="text" id="log-notes" placeholder="e.g. Worked through LM3 EOCQs, struggled with duration vs convexity..." class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg shadow transition flex items-center">
+                <i data-lucide="save" class="w-3.5 h-3.5 mr-1.5"></i> Save Session
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- History Table -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white">Study Session History</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 bg-slate-950/60 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <th class="py-3 px-4">Date & Time</th>
+                <th class="py-3 px-4">Topic</th>
+                <th class="py-3 px-4">Duration</th>
+                <th class="py-3 px-4">Score</th>
+                <th class="py-3 px-4">Accuracy</th>
+                <th class="py-3 px-4">Notes</th>
+              </tr>
+            </thead>
+            <tbody id="study-logs-tbody" class="divide-y divide-slate-800/60 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= TAB 6: SETTINGS & BACKUP ================= -->
+    <div id="tab-settings" class="tab-pane hidden space-y-6">
+      
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow">
+        <h3 class="text-base font-bold text-white mb-2">Data & Backup Management</h3>
+        <p class="text-xs text-slate-400 mb-6">Your progress is automatically saved to this browser's local storage. You can export backups or restore from a JSON file anytime.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-200 mb-1">Export Full Backup</h4>
+              <p class="text-xs text-slate-400 mb-4">Download a complete JSON file containing all module statuses, 24-day sprint progress, and study session logs.</p>
+            </div>
+            <div class="flex space-x-2">
+              <button onclick="app.exportData('json')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition flex items-center">
+                <i data-lucide="download" class="w-3.5 h-3.5 mr-1.5"></i> Export JSON
+              </button>
+              <button onclick="app.exportData('csv')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold transition flex items-center">
+                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 mr-1.5"></i> Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-200 mb-1">Import / Restore Backup</h4>
+              <p class="text-xs text-slate-400 mb-4">Restore your study tracker data from a previously exported JSON backup file.</p>
+            </div>
+            <div>
+              <label class="cursor-pointer inline-flex items-center px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold border border-slate-700 transition">
+                <i data-lucide="upload" class="w-3.5 h-3.5 mr-1.5"></i>
+                <span>Choose JSON Backup</span>
+                <input type="file" accept=".json" onchange="app.importData(event)" class="hidden">
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-semibold text-rose-400">Reset to Defaults</h4>
+            <p class="text-xs text-slate-500">Reset all module and sprint statuses back to original Excel data.</p>
+          </div>
+          <button onclick="app.resetToDefaults()" class="px-4 py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 rounded-lg text-xs font-bold transition">
+            Reset Everything
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900/80 border-t border-slate-800 py-6 text-center text-xs text-slate-500 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>CFA® is a registered trademark of CFA Institute. Built for candidate exam preparation.</p>
+      <div class="flex items-center space-x-4">
+        <span>Offline-First • Auto-Saving</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- App Data & Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
