@@ -1,12 +1,17 @@
 /* CFA Study Tracker Custom Styles */
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --bg-main: #0f172a;
-  --card-bg: #1e293b;
-  --card-border: #334155;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  /* Shared palette. Mirror of the Tailwind config in index.html and the
+     :root block in review/*.html - change all three together. */
+  --primary: #3f9d8f;        /* muted teal */
+  --primary-hover: #348275;
+  --bg-main: #1c1b1a;        /* warm charcoal */
+  --card-bg: #2a2725;
+  --card-border: #3d3936;
+  --text-main: #f5f2ee;      /* off-white */
+  --text-muted: #a29a91;
+  --accent: #d99a2b;         /* warm amber */
+  --wrong: #c2564a;          /* soft red */
+  --right: #3f8f6b;
 }
 
 body {
@@ -21,21 +26,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(28, 27, 26, 0.6);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(162, 154, 145, 0.35);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.7);
+  background: rgba(162, 154, 145, 0.6);
 }
 
 /* Glassmorphism effects */
 .glass-panel {
-  background: rgba(30, 41, 59, 0.75);
+  background: rgba(42, 39, 37, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -137,7 +142,7 @@ input[type="checkbox"] {
 }
 
 .review-content code {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(28, 27, 26, 0.8);
   padding: 0.15rem 0.4rem;
   border-radius: 0.25rem;
   font-family: ui-monospace, monospace;

@@ -15,9 +15,11 @@
 
 <style>
   :root{
-    --navy:#0f2a4a; --navy-2:#14385f; --accent:#c8a24a; --accent-soft:#f3ecd8;
-    --ink:#1c2530; --muted:#5c6b7a; --line:#e3e8ee; --bg:#eef2f7; --card:#fff;
-    --code-bg:#f0f4f8; --green:#1f7a54; --red:#b5473a;
+    /* Shared palette - mirror of the Tailwind config in ../index.html
+       and the :root block in ../css/styles.css. Change all three together. */
+    --navy:#1c1b1a; --navy-2:#2a2725; --accent:#d99a2b; --accent-soft:#f5efe2;
+    --ink:#221f1e; --muted:#5a544e; --line:#e7e2dc; --bg:#f5f2ee; --card:#faf8f6;
+    --code-bg:#efe9e1; --green:#3f8f6b; --red:#c2564a; --teal:#3f9d8f;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -25,18 +27,18 @@
     color:var(--ink);background:var(--bg);line-height:1.65;}
 
   .topbar{background:var(--navy);color:#fff;padding:20px 40px;display:flex;align-items:center;
-    justify-content:space-between;box-shadow:0 2px 8px rgba(15,42,74,.15);position:sticky;top:0;z-index:50;}
+    justify-content:space-between;box-shadow:0 2px 8px rgba(28,27,26,.18);position:sticky;top:0;z-index:50;}
   .topbar h1{margin:0;font-size:20px;letter-spacing:.3px;}
   .topbar .tag{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px;}
 
   .modtabs{display:flex;gap:6px;background:var(--navy-2);padding:0 40px;position:sticky;top:64px;z-index:49;
-    box-shadow:0 2px 6px rgba(15,42,74,.12);flex-wrap:wrap;}
-  .modtab{background:transparent;border:none;color:#b8c6d8;font-size:14px;font-weight:600;
+    box-shadow:0 2px 6px rgba(28,27,26,.14);flex-wrap:wrap;}
+  .modtab{background:transparent;border:none;color:#cdc6bd;font-size:14px;font-weight:600;
     padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;font-family:inherit;}
   .modtab:hover{color:#fff;background:rgba(255,255,255,.05);}
   .modtab.active{color:#fff;border-bottom-color:var(--accent);}
   .modtab .num{color:var(--accent);font-weight:700;margin-right:6px;}
-  .modtab.ref{margin-left:auto;color:#a9e0c5;}
+  .modtab.ref{margin-left:auto;color:#7cc0b4;}
   .modtab.ref.active{border-bottom-color:var(--green);}
 
   main{max-width:1000px;margin:0 auto;padding:36px 40px 90px;}

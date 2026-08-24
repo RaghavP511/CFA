@@ -9,17 +9,31 @@ const STORAGE_KEYS = {
   STUDY_LOGS: 'cfa_study_logs_v1',
   EXAM_DATE: 'cfa_exam_target_date_v1',
   THEME: 'cfa_theme_preference_v1',
-  NOTES: 'cfa_module_notes_v1'
+  NOTES: 'cfa_module_notes_v1',
+  DATA_VERSION: 'cfa_data_version_v1'
 };
 
 class CFATrackerApp {
   constructor() {
     this.data = window.CFA_DATA || {};
+
+    // When data.js ships a new curriculum (e.g. Level I -> Level II), clear the
+    // saved copies of module/sprint/exam state so the new data actually shows up.
+    const shippedVersion = this.data.dataVersion || null;
+    if (shippedVersion) {
+      let savedVersion = null;
+      try { savedVersion = JSON.parse(localStorage.getItem(STORAGE_KEYS.DATA_VERSION)); } catch (e) { savedVersion = null; }
+      if (savedVersion !== shippedVersion) {
+        [STORAGE_KEYS.MODULES, STORAGE_KEYS.SPRINT_DAYS, STORAGE_KEYS.EXAM_DATE].forEach(k => localStorage.removeItem(k));
+        try { localStorage.setItem(STORAGE_KEYS.DATA_VERSION, JSON.stringify(shippedVersion)); } catch (e) {}
+      }
+    }
+    this.reviewLevel = 'L2';
     this.modules = this.loadState(STORAGE_KEYS.MODULES, this.data.initialModules || []);
     this.sprintDays = this.loadState(STORAGE_KEYS.SPRINT_DAYS, this.data.initialSprintDays || []);
     this.studyLogs = this.loadState(STORAGE_KEYS.STUDY_LOGS, []);
     this.moduleNotes = this.loadState(STORAGE_KEYS.NOTES, {});
-    this.examDate = this.loadState(STORAGE_KEYS.EXAM_DATE, this.data.examDate || '2026-05-15T08:30:00');
+    this.examDate = this.loadState(STORAGE_KEYS.EXAM_DATE, this.data.examDate || '2026-11-21T08:30:00');
     this.activeTab = 'dashboard';
     
     // Timer state
@@ -237,7 +251,7 @@ class CFATrackerApp {
             <span class="text-slate-400 text-sm">${nextDay.phase}</span>
           </div>
           <button onclick="app.switchTab('sprint')" class="text-xs font-medium text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
-            <span>View Full 24-Day Sprint</span>
+            <span>View Full 88-Day Plan</span>
             <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </button>
         </div>
@@ -576,7 +590,9 @@ class CFATrackerApp {
     const container = document.getElementById('review-content-body');
     if (!container) return;
 
-    const raw = this.data.reviewGuideRaw || '';
+    const raw = (this.reviewLevel === 'L1'
+      ? (this.data.reviewGuideL1Raw || '')
+      : (this.data.reviewGuideRaw || ''));
     
     // Simple fast markdown formatter for the review guide
     let html = raw
@@ -591,6 +607,19 @@ class CFATrackerApp {
 
     container.innerHTML = html;
     if (window.lucide) window.lucide.createIcons();
+  }
+
+  setReviewLevel(level) {
+    this.reviewLevel = level;
+    const l2 = document.getElementById('review-level-l2');
+    const l1 = document.getElementById('review-level-l1');
+    const on = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition';
+    const off = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition';
+    if (l2) l2.className = (level === 'L2') ? on : off;
+    if (l1) l1.className = (level === 'L1') ? on : off;
+    const search = document.getElementById('search-review');
+    if (search) search.value = '';
+    this.renderReviewGuide();
   }
 
   filterReviewGuide(searchTerm) {
@@ -835,7 +864,7 @@ class CFATrackerApp {
       this.sprintDays = this.data.initialSprintDays || [];
       this.studyLogs = [];
       this.moduleNotes = {};
-      this.examDate = this.data.examDate || '2026-05-15T08:30:00';
+      this.examDate = this.data.examDate || '2026-11-21T08:30:00';
       this.renderDashboard();
       this.renderModules();
       this.renderSprint();

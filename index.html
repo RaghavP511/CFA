@@ -3,23 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CFA Level I Study Tracker & Sprint Dashboard</title>
+  <title>CFA Level II Study Tracker & 88-Day Plan</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    /* ---------------------------------------------------------------
+       ONE PALETTE. Change these hexes and the whole product changes -
+       tracker and every review page. Kept in sync with the CSS custom
+       properties in css/styles.css and review/*.html.
+       --------------------------------------------------------------- */
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
+            /* warm charcoal base, remapped over Tailwind's slate scale so the
+               existing markup picks it up without touching every class */
+            slate: {
+              50:  '#faf8f6',
+              100: '#f5f2ee',
+              200: '#e7e2dc',
+              300: '#cdc6bd',
+              400: '#a29a91',
+              500: '#7d766e',
+              600: '#5a544e',
+              700: '#3d3936',
+              800: '#2a2725',
+              900: '#221f1e',
+              950: '#1c1b1a',
+            },
+            /* muted teal - primary accent */
+            indigo: {
+              50:  '#eef7f5',
+              100: '#d6ece8',
+              200: '#aed9d1',
+              300: '#7cc0b4',
+              400: '#55aa9c',
+              500: '#3f9d8f',
+              600: '#348275',
+              700: '#2b6a60',
+              800: '#24544d',
+              900: '#1e443f',
+              950: '#122b27',
+            },
+            sky: {
+              300: '#7cc0b4', 400: '#55aa9c', 500: '#3f9d8f', 600: '#348275',
+            },
+            /* warm amber - emphasis, streaks, highlights */
+            amber: {
+              300: '#e8bd6d', 400: '#dfa945', 500: '#d99a2b', 600: '#b87d1e',
+            },
+            yellow: {
+              300: '#e8bd6d', 400: '#dfa945', 500: '#d99a2b', 600: '#b87d1e',
+            },
+            orange: {
+              400: '#dfa945', 500: '#d99a2b', 600: '#b87d1e',
+            },
+            /* soft red - wrong answers and destructive actions only */
+            red: {
+              300: '#d98a80', 400: '#cb6d61', 500: '#c2564a', 600: '#a4463c',
+            },
+            rose: {
+              400: '#cb6d61', 500: '#c2564a', 600: '#a4463c',
+            },
+            /* correct answers */
+            emerald: {
+              300: '#79bfa1', 400: '#57a986', 500: '#3f8f6b', 600: '#337358',
+            },
+            green: {
+              400: '#57a986', 500: '#3f8f6b', 600: '#337358',
+            },
+            teal: {
+              300: '#7cc0b4', 400: '#55aa9c', 500: '#3f9d8f', 600: '#348275',
+            },
+            pink: {
+              300: '#e8bd6d', 400: '#dfa945', 500: '#d99a2b',
+            },
+            purple: {
+              300: '#b6a99a', 400: '#9c8b79', 500: '#847360',
+            },
+            violet: {
+              400: '#9c8b79', 500: '#847360',
+            },
             brand: {
-              50: '#eef2ff',
-              100: '#e0e7ff',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-              900: '#312e81',
+              50: '#eef7f5', 100: '#d6ece8', 500: '#3f9d8f',
+              600: '#348275', 700: '#2b6a60', 900: '#1e443f',
             }
           }
         }
@@ -50,10 +119,10 @@
         </div>
         <div>
           <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-            CFA Level I
+            CFA Level II
             <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Candidate Tracker</span>
           </h1>
-          <p class="text-xs text-slate-400">Mastery Hub • 24-Day Sprint • EOCQ Practice</p>
+          <p class="text-xs text-slate-400">Mastery Hub • 88-Day Plan • Item-Set Practice</p>
         </div>
       </div>
 
@@ -104,11 +173,11 @@
       </button>
       <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="curriculum">
         <i data-lucide="book-marked" class="w-4 h-4"></i>
-        <span>Curriculum (103 Modules)</span>
+        <span>Curriculum (46 Modules)</span>
       </button>
       <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="sprint">
         <i data-lucide="flame" class="w-4 h-4"></i>
-        <span>24-Day Sprint & Rules</span>
+        <span>88-Day Plan & Rules</span>
       </button>
       <button class="nav-btn px-4 py-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center space-x-2 transition whitespace-nowrap" data-tab="review">
         <i data-lucide="file-check" class="w-4 h-4"></i>
@@ -151,7 +220,7 @@
             <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
           </div>
           <div class="text-2xl font-extrabold text-emerald-400 mt-2">
-            <span id="stat-completed-modules">0</span> <span class="text-sm font-normal text-slate-400">/ <span id="stat-total-modules">103</span></span>
+            <span id="stat-completed-modules">0</span> <span class="text-sm font-normal text-slate-400">/ <span id="stat-total-modules">46</span></span>
           </div>
           <div class="text-xs text-slate-500 mt-2">Core Learning Modules</div>
         </div>
@@ -162,7 +231,7 @@
             <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
           </div>
           <div class="text-2xl font-extrabold text-amber-400 mt-2" id="stat-sprint-pct">0%</div>
-          <div class="text-xs text-slate-500 mt-2">24-Day Schedule Tasks</div>
+          <div class="text-xs text-slate-500 mt-2">88-Day Plan Tasks</div>
         </div>
 
         <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
@@ -212,24 +281,24 @@
               <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400 mr-2"></i>
               Heavyweight Priorities
             </h3>
-            <p class="text-xs text-slate-400 mb-4">Focus 60%+ effort on the highest-weight topics:</p>
+            <p class="text-xs text-slate-400 mb-4">Five topics sit at 10–15%. Together they are over half the exam:</p>
             
             <div class="space-y-3">
               <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
-                <span class="font-medium text-slate-200">Ethical & Professional Standards</span>
-                <span class="text-indigo-400 font-bold">15–20% Weight</span>
+                <span class="font-medium text-slate-200">Financial Statement Analysis</span>
+                <span class="text-amber-400 font-bold">10–15% Weight</span>
               </div>
               <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
-                <span class="font-medium text-slate-200">Financial Statement Analysis</span>
-                <span class="text-amber-400 font-bold">13–17% Weight</span>
+                <span class="font-medium text-slate-200">Equity Valuation</span>
+                <span class="text-pink-400 font-bold">10–15% Weight</span>
               </div>
               <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
                 <span class="font-medium text-slate-200">Fixed Income</span>
-                <span class="text-teal-400 font-bold">12–14% Weight</span>
+                <span class="text-teal-400 font-bold">10–15% Weight</span>
               </div>
               <div class="flex items-center justify-between p-2 rounded-lg bg-slate-950 border border-slate-800 text-xs">
-                <span class="font-medium text-slate-200">Equity Investments</span>
-                <span class="text-pink-400 font-bold">10–12% Weight</span>
+                <span class="font-medium text-slate-200">Portfolio Management</span>
+                <span class="text-yellow-400 font-bold">10–15% Weight</span>
               </div>
             </div>
           </div>
@@ -268,16 +337,16 @@
         <div class="w-full sm:w-auto">
           <select id="filter-topic" class="w-full py-2 px-3 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
             <option value="all">All 10 Topics</option>
-            <option value="Ethical and Professional Standards">Ethical & Professional Standards (15-20%)</option>
-            <option value="Quantitative Methods">Quantitative Methods (8-12%)</option>
-            <option value="Economics">Economics (8-12%)</option>
-            <option value="Financial Statement Analysis">Financial Statement Analysis (13-17%)</option>
-            <option value="Corporate Issuers">Corporate Issuers (8-12%)</option>
-            <option value="Equity Investments">Equity Investments (10-12%)</option>
-            <option value="Fixed Income">Fixed Income (12-14%)</option>
-            <option value="Derivatives">Derivatives (5-8%)</option>
-            <option value="Alternative Investments">Alternative Investments (5-8%)</option>
-            <option value="Portfolio Management">Portfolio Management (5-8%)</option>
+            <option value="Ethical and Professional Standards">Ethical & Professional Standards (10-15%)</option>
+            <option value="Quantitative Methods">Quantitative Methods (5-10%)</option>
+            <option value="Economics">Economics (5-10%)</option>
+            <option value="Financial Statement Analysis">Financial Statement Analysis (10-15%)</option>
+            <option value="Corporate Issuers">Corporate Issuers (5-10%)</option>
+            <option value="Equity Valuation">Equity Valuation (10-15%)</option>
+            <option value="Fixed Income">Fixed Income (10-15%)</option>
+            <option value="Derivatives">Derivatives (5-10%)</option>
+            <option value="Alternative Investments">Alternative Investments (5-10%)</option>
+            <option value="Portfolio Management">Portfolio Management (10-15%)</option>
             <option value="Review">Review & Mock Exams</option>
           </select>
         </div>
@@ -306,7 +375,7 @@
 
       <!-- Module Count & Legend -->
       <div class="flex items-center justify-between text-xs text-slate-400 px-1">
-        <span id="filtered-module-count">103 Modules</span>
+        <span id="filtered-module-count">46 Modules</span>
         <span>Click on any status pill to toggle: <strong>Not Started &rarr; In Progress &rarr; Complete</strong></span>
       </div>
 
@@ -340,12 +409,12 @@
           <div>
             <h2 class="text-xl font-black text-white flex items-center">
               <i data-lucide="flame" class="w-5 h-5 mr-2 text-orange-500"></i>
-              The 24-Day EOCQ-First Sprint Strategy
+              The 88-Day Level II Plan
             </h2>
             <p class="text-xs text-slate-400 mt-1">High-yield execution plan built for candidate mastery</p>
           </div>
           <span class="px-3 py-1 bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 rounded-full text-xs font-bold">
-            25 SPRINT DAYS
+            89 PLAN DAYS
           </span>
         </div>
 
@@ -371,9 +440,15 @@
         <div>
           <h2 class="text-lg font-bold text-white flex items-center">
             <i data-lucide="book-open-check" class="w-5 h-5 mr-2 text-sky-400"></i>
-            CFA Level I Deep Mastery Guide & Traps
+            CFA Level II Review & Traps
           </h2>
-          <p class="text-xs text-slate-400">Edge cases, critical exam traps, formulas, and missed concept checklists</p>
+          <p class="text-xs text-slate-400">Level II item-set traps and formulas. Your Level I guide is archived here too.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="review-level-l2" onclick="app.setReviewLevel('L2')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">Level II</button>
+          <button id="review-level-l1" onclick="app.setReviewLevel('L1')" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Level I (archive)</button>
+          <a href="review/quant.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-sky-300 hover:bg-slate-700 transition">Quant module pages &rarr;</a>
         </div>
 
         <div class="relative w-full sm:w-72">
@@ -433,7 +508,7 @@
                   <option value="Economics">Economics</option>
                   <option value="Financial Statement Analysis">Financial Statement Analysis</option>
                   <option value="Corporate Issuers">Corporate Issuers</option>
-                  <option value="Equity Investments">Equity Investments</option>
+                  <option value="Equity Valuation">Equity Valuation</option>
                   <option value="Fixed Income">Fixed Income</option>
                   <option value="Derivatives">Derivatives</option>
                   <option value="Alternative Investments">Alternative Investments</option>
